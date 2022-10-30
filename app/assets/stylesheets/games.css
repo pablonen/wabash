@@ -1,0 +1,7 @@
+svg.board {
+  width: 50%;
+  flex: 1;
+}
+use {
+  fill: transparent;
+}

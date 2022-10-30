@@ -1,0 +1,19 @@
+<%= @game.name %>
+<% hex_h = 18 %>
+<% hex_w = 15 %>
+
+<svg viewBox="0 0 100 100" class="board">
+  <defs>
+    <g id="hex">
+      <polygon stroke="#000000" stroke-width="0.5" points="5, -9 -5,-9 -10, 0 -5, 9 5, 9 10, 0" />
+    </g>
+  </defs>
+
+  <g class="hex-wrap">
+    <% (35..80).step(15).each_with_index do |x, i| %>
+      <% (41..80).step(18).each do |y| %>
+        <use xlink:href="#hex" transform="translate(<%=x%>,<%=i % 2 == 0 ? y : y + hex_h / 2 %>)" /> 
+      <% end %>
+    <% end %>
+  </g>
+</svg>

@@ -1,0 +1,26 @@
+<div id="<%= dom_id game %>">
+  <p>
+    <strong>Name:</strong>
+    <%= game.name %>
+  </p>
+
+  <p>
+    <strong>Min players:</strong>
+    <%= game.min_players %>
+  </p>
+
+  <p>
+    <strong>Max players:</strong>
+    <%= game.max_players %>
+  </p>
+
+  <p>
+    <strong>State:</strong>
+    <%= game.state %>
+  </p>
+
+  <p>
+    <strong>Board:</strong>
+    <%= render 'board', locals: {game: @game} %>
+  </p>
+</div>
