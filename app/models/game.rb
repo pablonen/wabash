@@ -6,4 +6,6 @@ class Game < ApplicationRecord
 
   HEX_DATA = {}
   COL_ALPHA = (('A'.ord)..('A'.ord+MAP_COLS)).map(&:chr)
+
+  
 end
