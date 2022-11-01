@@ -1,5 +1,3 @@
-<%# @game.name %>
-
 <svg viewBox="0 0 100 100" class="board">
   <defs>
     <g id="hex">
@@ -9,8 +7,9 @@
 
   <g class="hex-wrap">
     <% (Game::HEX_W..Game::HEX_W*Game::MAP_COLS).step(Game::HEX_W).each_with_index do |x, i| %>
-      <% (Game::HEX_H..Game::HEX_H*Game::MAP_ROWS).step(Game::HEX_H).each do |y| %>
-        <use href="#hex" transform="translate(<%=x%>,<%=i % 2 == 0 ? y : y + Game::HEX_H / 2 %>)" /> 
+      <% (Game::HEX_H..Game::HEX_H*Game::MAP_ROWS).step(Game::HEX_H).each_with_index do |y, j| %>
+        <% hex_id = Game::COL_ALPHA[i]+j.to_s %>
+        <use href="#hex" id="<%=hex_id%>" transform="translate(<%=x%>,<%=i % 2 == 0 ? y : y + Game::HEX_H / 2 %>)" /> 
       <% end %>
     <% end %>
   </g>
