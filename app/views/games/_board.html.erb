@@ -8,6 +8,9 @@
   <g class="hex-wrap">
     <% @game.grid_enumerator do |x,y,i,j| %>
       <use href="#hex" transform="translate(<%=x%>,<%=i % 2 == 0 ? y : y + Game::HEX_H / 2 %>)" /> 
+      <% if @game.built?(Game::COL_ALPHA[i]+j.to_s) %>
+        <rect x="<%=x%>" y="<%=y%>" width=3 height=3 fill="violet" />
+      <% end %>
     <% end %> 
   </g>
 </svg>
