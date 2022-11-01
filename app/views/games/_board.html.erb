@@ -11,7 +11,7 @@
       <% if @game.built?(coordinate) %>
         <rect x="<%=x%>" y="<%=y%>" width=3 height=3 fill="violet" />
       <% end %>
-      <text x="<%=x %>" y="<%=y%>">-<%= @game.build_cost(coordinate) %></text>
+      <text class="cost" x="<%=x-5 %>" y="<%=y-4%>">-<%= @game.build_cost(coordinate) %></text>
     <% end %> 
   </g>
 </svg>

@@ -6,6 +6,7 @@ use {
   fill: transparent;
 }
 
-.hex-wrap text {
+.hex-wrap text.cost {
   font: 4px sans-serif;
+  fill: red;
 }
