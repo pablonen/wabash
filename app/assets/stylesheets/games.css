@@ -5,3 +5,7 @@ svg.board {
 use {
   fill: transparent;
 }
+
+.hex-wrap text {
+  font: 4px sans-serif;
+}

@@ -24,10 +24,22 @@ class Game < ApplicationRecord
     true
   end
 
+  def build_cost(hex)
+    state["hexes"][hex]["cost"] || 0
+  end
+
+  def coordinate(i,j)
+    COL_ALPHA[i]+j.to_s
+  end
+
   def grid_enumerator
     (HEX_W..HEX_W*MAP_COLS).step(HEX_W).each_with_index do |x, i|
       (HEX_H..HEX_H*MAP_ROWS).step(HEX_H).each_with_index do |y, j|
-        yield x,y,i,j
+        if i % 2 == 0
+          yield x,y,i,j,coordinate(i,j)
+        else
+          yield x,y+HEX_H / 2,i,j,coordinate(i,j)
+        end
       end
     end
   end
