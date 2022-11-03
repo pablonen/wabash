@@ -39,11 +39,15 @@ class Game < ApplicationRecord
   def grid_enumerator
     (HEX_W..HEX_W*MAP_COLS).step(HEX_W).each_with_index do |x, i|
       (HEX_H..HEX_H*MAP_ROWS).step(HEX_H).each_with_index do |y, j|
-        if i % 2 == 0
-          yield x,y,i,j,coordinate(i,j)
-        else
-          yield x,y+HEX_H / 2,i,j,coordinate(i,j)
+        if i % 2 == 1
+          y = y + HEX_H / 2
         end
+        hex_id = coordinate(i,j)
+        hex_built = built?(hex_id)
+        hex_build_cost = build_cost(hex_id)
+        hex_type = hex_type(hex_id)
+
+        yield Hex.new(x,y,i,j,hex_id,hex_type,hex_build_cost, hex_built)
       end
     end
   end
