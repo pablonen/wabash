@@ -32,6 +32,10 @@ class Game < ApplicationRecord
     COL_ALPHA[i]+j.to_s
   end
 
+  def hex_type(hex)
+    state["hexes"][hex]["type"] || "undefined"
+  end
+
   def grid_enumerator
     (HEX_W..HEX_W*MAP_COLS).step(HEX_W).each_with_index do |x, i|
       (HEX_H..HEX_H*MAP_ROWS).step(HEX_H).each_with_index do |y, j|

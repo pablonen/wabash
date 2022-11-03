@@ -8,7 +8,7 @@
 
     <g class="hex-wrap">
       <% @game.grid_enumerator do |x,y,i,j,coordinate| %>
-        <use href="#hex" transform="translate(<%=x%>,<%=y%>)" /> 
+        <use href="#hex" transform="translate(<%=x%>,<%=y%>)" class="<%= @game.hex_type(coordinate) %>" /> 
         <% if @game.built?(coordinate) %>
           <rect x="<%=x%>" y="<%=y%>" width=3 height=3 fill="violet" />
         <% end %>

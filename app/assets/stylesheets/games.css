@@ -2,11 +2,32 @@ svg.board {
   width: 50%;
   flex: 1;
 }
-use {
-  fill: transparent;
-}
 
 .hex-wrap text.cost {
   font: 4px sans-serif;
   fill: red;
+}
+
+use.undefined {
+  fill: #000080;
+}
+
+use.field {
+  fill: #ffd700;
+}
+
+use.forest {
+  fill: #228b22;
+}
+
+use.town {
+  fill: #a9a9a9;
+}
+
+use.city {
+  fill: #fafad2;
+}
+
+use.mountain {
+  fill: #a9a9a9;
 }
