@@ -4,10 +4,8 @@ one:
   name: MyString
   min_players: 1
   max_players: 1
-  state: 
 
 two:
   name: MyString
   min_players: 1
   max_players: 1
-  state: 

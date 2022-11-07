@@ -12,7 +12,7 @@ class GamesController < ApplicationController
 
   # GET /games/new
   def new
-    @game = Game.new
+    @game = Game.new state: nil
   end
 
   # GET /games/1/edit
