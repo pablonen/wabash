@@ -1,5 +1,4 @@
 svg.board {
-  width: 50%;
   flex: 1;
 }
 
@@ -21,11 +20,13 @@ use.forest {
 }
 
 use.town {
-  fill: #a9a9a9;
+  fill: #fafdd2;
 }
 
 use.city {
-  fill: #fafad2;
+  fill: #a9a9a9;
+  stroke: red;
+  stroke-width: 1;
 }
 
 use.mountain {
