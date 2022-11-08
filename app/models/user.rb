@@ -6,4 +6,8 @@ class User < ApplicationRecord
 
   has_many :game_players
   has_many :games, through: :game_players
+
+  def in_game?(game)
+    games.find_by(id: game.id)
+  end
 end

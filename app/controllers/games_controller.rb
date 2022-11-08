@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: %i[ show edit update destroy build new_build]
+  before_action :set_game, only: %i[ show edit update destroy build new_build join new_join destroy_join]
   before_action :authenticate_user!
 
   # GET /games or /games.json
@@ -18,6 +18,31 @@ class GamesController < ApplicationController
 
   # GET /games/1/edit
   def edit
+  end
+
+  # POST /games/1/join
+  def join
+    @user = User.find(params[:user_id])
+    respond_to do |format|
+      unless @user.in_game?(@game)
+        @user.game_players.create(game: @game, seat: @game.players.size)
+        format.html { redirect_to game_url(@game), notice: "you joined the game!" }
+      else
+        format.html { redirect_to game_url(@game), notice: "already joined in game!" }
+      end
+    end
+  end
+
+  # GET /games/1/new_join
+  def new_join
+  end
+
+  # DELETE /games/1/joins/1
+  def destroy_join
+    respond_to do |format|
+      GamePlayer.find_by(game_id: @game.id, user_id: current_user.id ).destroy
+      format.html { redirect_to game_url(@game), notice: "Left game" }
+    end
   end
 
   # POST /games/1/build

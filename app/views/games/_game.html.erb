@@ -15,6 +15,15 @@
   </p>
 
   <p>
+    <strong>Joined:</strong>
+    <ol>
+      <% game.game_players.each do |game_player| %>
+        <li><%= game_player.user_id %> seat:<%= game_player.seat %></li>
+      <% end %>
+    </ol>
+  </p>
+
+  <p>
     <strong>State:</strong>
     <%= game.state %>
   </p>
