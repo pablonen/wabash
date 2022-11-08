@@ -1,8 +1,11 @@
 require "test_helper"
 
 class GamesControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
   setup do
     @game = games(:one)
+    @user = users(:one)
+    sign_in @user
   end
 
   test "should get index" do
