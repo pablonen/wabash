@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: %i[ show edit update destroy ]
+  before_action :set_game, only: %i[ show edit update destroy build new_build]
+  before_action :authenticate_user!
 
   # GET /games or /games.json
   def index
@@ -17,6 +18,20 @@ class GamesController < ApplicationController
 
   # GET /games/1/edit
   def edit
+  end
+
+  # POST /games/1/build
+  def build
+    # validate user turn
+    # validate legit turn
+    # persist turn to state
+    respond_to do |format|
+      format.html { redirect_to game_url(@game), notice: "built!"}
+    end
+  end
+
+  # GET /games/1/new_build
+  def new_build
   end
 
   # POST /games or /games.json

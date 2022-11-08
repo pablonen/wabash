@@ -1,0 +1,12 @@
+<%= form_with url: game_builds_path  do |form| %>
+  <%# handle errors ? %>
+
+  <div>
+    <%= form.label :hex, style: "display: block" %>
+    <%= form.select :hex, @game.state["hexes"].keys.map { |hex| [hex,hex] } %>
+  </div>
+
+  <div>
+    <%= form.submit 'Build' %>
+  </div>
+<% end %>
