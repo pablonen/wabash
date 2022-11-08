@@ -1,4 +1,6 @@
 class Game < ApplicationRecord
+  has_many :game_players
+  has_many :players, through: :game_players, source: :user
   HEX_H = 18
   HEX_W = 15
   MAP_COLS = 19
