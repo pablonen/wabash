@@ -10,4 +10,8 @@ class User < ApplicationRecord
   def in_game?(game)
     games.find_by(id: game.id)
   end
+
+  def acting?(game)
+    game.user_acting?(self)
+  end
 end

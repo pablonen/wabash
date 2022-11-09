@@ -14,8 +14,32 @@ class Game < ApplicationRecord
     true
   end
 
+  def build(hex)
+    state["hexes"][hex]["built"] = true
+    save
+  end
+
+  def next_turn!
+    state["acting_seat"] = (state["acting_seat"] + 1) % number_of_players
+    save
+  end
+
+  def number_of_players
+    players.size
+  end
+
+  def user_acting?(user)
+    seat_acting = acting_seat
+    user_seat = game_players.find_by(user: user).seat
+    user_seat == seat_acting
+  end
+
   def build_cost(hex)
     state["hexes"].dig(hex, "cost") || 0
+  end
+
+  def acting_seat
+    state["acting_seat"]
   end
 
   def coordinate(i,j)
