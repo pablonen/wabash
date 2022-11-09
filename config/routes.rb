@@ -2,8 +2,8 @@ Rails.application.routes.draw do
   devise_for :users
   resources :games
 
-  get 'games/:id/new_build', to: 'games#new_build', as: 'new_build'
-  post 'games/:id/builds', to: 'games#build', as: 'game_builds'
+  get 'games/:game_id/new_build', to: 'builds#new_build', as: 'new_build'
+  post 'games/:game_id/builds', to: 'builds#build', as: 'game_builds'
 
   get 'games/:id/new_join', to: 'games#new_join', as: 'new_join'
   post 'games/:id/joins', to: 'games#join', as: 'game_joins'

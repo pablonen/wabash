@@ -45,29 +45,6 @@ class GamesController < ApplicationController
     end
   end
 
-  # POST /games/1/build
-  def build
-    # validate user turn
-    b = Build.new current_user, @game, params[:hex]
-    # validate legit turn
-    # persist turn to state
-    respond_to do |format|
-      if b.validate
-        @game.build(params[:hex])
-        @game.next_turn!
-        format.html { redirect_to game_url(@game), notice: "built!"}
-      else
-        # TODO
-        flash[:error] = "it was not your turn to build"
-        format.html { render 'show', status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # GET /games/1/new_build
-  def new_build
-  end
-
   # POST /games or /games.json
   def create
     @game = Game.new(game_params)
@@ -114,6 +91,6 @@ class GamesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def game_params
-      params.require(:game).permit(:name, :min_players, :max_players, :state, :hex)
+      params.require(:game).permit(:name, :min_players, :max_players, :state)
     end
 end
