@@ -1,6 +1,8 @@
+# TODO, started column should be renamed to started_at
 class Game < ApplicationRecord
   has_many :game_players, dependent: :destroy
   has_many :players, through: :game_players, source: :user
+  belongs_to :user
   HEX_H = 18
   HEX_W = 15
   MAP_COLS = 19
@@ -14,6 +16,10 @@ class Game < ApplicationRecord
     true
   end
 
+  def owner
+    user
+  end
+
   def build(hex)
     state["hexes"][hex]["built"] = true
     save
@@ -24,12 +30,21 @@ class Game < ApplicationRecord
     save
   end
 
+  def started?
+    started
+  end
+
+  def start!
+    update_attribute(:started, DateTime.now)
+  end
+
   def number_of_players
     players.size
   end
 
   def user_acting?(user)
     return false if game_players.empty?
+    return false unless players.include? user
     seat_acting = acting_seat
     user_seat = game_players.find_by(user: user).seat
     user_seat == seat_acting

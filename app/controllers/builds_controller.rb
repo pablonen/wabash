@@ -14,14 +14,13 @@ class BuildsController < ApplicationController
     # validate legit turn
     # persist turn to state
     respond_to do |format|
-      if b.validate
+      if b.valid?
         @game.build(params[:hex])
         @game.next_turn!
         format.html { redirect_to game_url(@game), notice: "built!"}
       else
         # TODO
-        flash[:error] = "it was not your turn to build"
-        format.html { render 'show', status: :unprocessable_entity }
+        format.html { render 'games/new_build', status: :unprocessable_entity }
       end
     end
   end

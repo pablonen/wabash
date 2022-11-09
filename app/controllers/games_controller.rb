@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: %i[ show edit update destroy build new_build join new_join destroy_join]
+  before_action :set_game, only: %i[ show edit update destroy start join new_join destroy_join]
   before_action :authenticate_user!
 
   # GET /games or /games.json
@@ -18,6 +18,19 @@ class GamesController < ApplicationController
 
   # GET /games/1/edit
   def edit
+  end
+
+  # POST /games/1/start
+  def start
+    respond_to do |format|
+      # TODO, extract_method
+      if current_user == @game.owner
+        @game.start!
+        format.html { redirect_to game_url(@game), notice: 'Game started!' }
+      else
+        format.html { redirect_to game_url(@game), notice: 'You must be the game ownre to start a game' }
+      end
+    end
   end
 
   # POST /games/1/join
@@ -47,7 +60,7 @@ class GamesController < ApplicationController
 
   # POST /games or /games.json
   def create
-    @game = Game.new(game_params)
+    @game = Game.new(game_params.merge(user_id: current_user.id))
 
     respond_to do |format|
       if @game.save
@@ -91,6 +104,6 @@ class GamesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def game_params
-      params.require(:game).permit(:name, :min_players, :max_players, :state)
+      params.require(:game).permit(:name, :min_players, :max_players, :state, :user_id)
     end
 end

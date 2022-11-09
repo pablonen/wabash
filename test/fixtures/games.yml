@@ -4,8 +4,13 @@ one:
   name: MyString
   min_players: 1
   max_players: 1
+  started: nil
+  user: one
 
 two:
   name: MyString
   min_players: 1
   max_players: 1
+  started: nil
+  user: two
+

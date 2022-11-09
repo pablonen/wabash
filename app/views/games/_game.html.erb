@@ -15,6 +15,19 @@
   </p>
 
   <p>
+    <strong>Owner:</strong>
+    <%= game.owner.id %>
+  </p>
+
+  <p>
+      <strong>Started:</strong>
+      <% if start_time = game.started %>
+        <time datetime="<%= start_time %>"><%= start_time %></time>
+      <% else %>
+        not started
+      <% end %>
+  </p>
+  <p>
     <strong>Joined:</strong>
     <ol>
       <% game.game_players.each do |game_player| %>

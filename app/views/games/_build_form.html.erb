@@ -1,5 +1,15 @@
 <%= form_with url: game_builds_path do |form| %>
-  <%# handle errors ? %>
+  <% if @game.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@game.errors.count, "error") %> prohibited this game from being saved:</h2>
+
+      <ul>
+        <% @game.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
   <div>
     <%= form.label :hex, style: "display: block" %>
