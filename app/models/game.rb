@@ -29,6 +29,7 @@ class Game < ApplicationRecord
   end
 
   def user_acting?(user)
+    return false if game_players.empty?
     seat_acting = acting_seat
     user_seat = game_players.find_by(user: user).seat
     user_seat == seat_acting
@@ -38,8 +39,12 @@ class Game < ApplicationRecord
     state["hexes"].dig(hex, "cost") || 0
   end
 
+  # Initializes the acting seat to state, I was too tired to create a
+  # migration for adding the piece of state to the db default
   def acting_seat
-    state["acting_seat"]
+    return state["acting_seat"] unless state["acting_seat"].nil?
+    state["acting_seat"] = 0
+    save
   end
 
   def coordinate(i,j)
