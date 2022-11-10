@@ -1,7 +1,7 @@
 <p style="color: green"><%= notice %></p>
 
 <%= link_to 'Join game', new_join_path(@game) unless current_user.in_game?(@game) %>
-<%= link_to 'Leave game', destroy_join_path(@game, current_user ), data: {turbo_method: :delete, turbo_confirm: "Are you sure to leave?"} if current_user.in_game?(@game) %>
+<%= link_to 'Leave game', destroy_join_path(@game, current_user ), data: {turbo_method: :delete, turbo_confirm: "Are you sure to leave?"} if current_user.in_game?(@game) && !@game.started? %>
 
 <% if @game.started? %>
   <%= link_to 'Build hex', new_build_path(@game) if current_user.acting?(@game) %>

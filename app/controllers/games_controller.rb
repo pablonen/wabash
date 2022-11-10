@@ -53,8 +53,12 @@ class GamesController < ApplicationController
   # DELETE /games/1/joins/1
   def destroy_join
     respond_to do |format|
-      GamePlayer.find_by(game_id: @game.id, user_id: current_user.id ).destroy
-      format.html { redirect_to game_url(@game), notice: "Left game" }
+      unless @game.started?
+        GamePlayer.find_by(game_id: @game.id, user_id: current_user.id ).destroy
+        format.html { redirect_to game_url(@game), notice: "Left game" }
+      else
+        format.html { redirect_to game_url(@game), notice: "Game started, cannot leave the game!" }
+      end
     end
   end
 
