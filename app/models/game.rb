@@ -35,6 +35,14 @@ class Game < ApplicationRecord
   end
 
   def start!
+    starting_money = 120 / players.size
+
+    state[:players] = {}
+    game_players.pluck(:seat).each do |seat|
+      state[:players][seat] = {money: starting_money, shares: {}}
+    end
+    # updates other dirty attributes on the object, in this case money of
+    # the players in state
     update_attribute(:started, DateTime.now)
   end
 
