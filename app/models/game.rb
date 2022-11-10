@@ -13,7 +13,7 @@ class Game < ApplicationRecord
 
   def built?(hex)
     return false unless state.dig("hexes", hex, "built")
-    true
+    state.dig("hexes", hex, "built")
   end
 
   def owner
