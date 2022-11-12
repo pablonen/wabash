@@ -17,7 +17,7 @@ class Auction
   attr_reader :errors
 
   def valid?
-    on_phase? &&
+    on_bidding_phase? &&
     on_turn? &&
     valid_bid? &&
     sufficient_money?
@@ -28,33 +28,37 @@ class Auction
   end
 
   def valid_start?
-    on_phase? &&
+    on_start_auction_phase? &&
     on_turn? &&
     sufficient_money?
   end
 
   # cannot start an auction on build/dev/bidding phase
   # cannot bid on build/dev phase
-  def on_phase?
-    @game.errors.add(:base, "Cannot auction on build phase") unless @game.can_auction?
+  def on_start_auction_phase?
+    @game.errors.add(:base, "Cannot auction/bid on build phase") unless @game.can_auction?
     @game.can_auction?
   end
 
+  def on_bidding_phase?
+    @game.errors.add(:base, "Nothing to bid, or build/dev phase") unless @game.phase?(:bidding)
+    @game.phase?(:bidding)
+  end
+
   def on_turn?
-    @game.errors.add(:base, "Not your turn to big") unless @game.user_acting?(@actor)
+    @game.errors.add(:base, "Not your turn to bid") unless @game.user_acting?(@actor)
     @game.user_acting?(@actor)
   end
 
   def sufficient_money?
-    @game.errors.add(:base, "Not enough money for bid") if @game.player_money(@actor) > bid
-    @game.player_money(@actor) > bid
+    @game.errors.add(:base, "Not enough money for bid") if @game.player_money(@actor) < @bid
+    @game.player_money(@actor) > @bid
   end
 
   # TODO, implement minimum bid rules
   def valid_bid?
-    return true if @starting_bid
-    @game.errors.add(:base, "Bid must be higher than going price") if @bid < @game.state['high_bid']
-    @bid < @game.state['high_bid']
+    @game.errors.add(:base, "Bid must be higher than going price") if @bid < @game.state['high_bid'].to_i
+    @bid > @game.state['high_bid']
   end
   # Implementation boilerplate see https://api.rubyonrails.org/v7.0.4/classes/ActiveModel/Errors.html 
   def read_attribute_for_validation(attr)
