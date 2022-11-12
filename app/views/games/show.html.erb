@@ -4,10 +4,14 @@
 <%= link_to 'Leave game', destroy_join_path(@game, current_user ), data: {turbo_method: :delete, turbo_confirm: "Are you sure to leave?"} if current_user.in_game?(@game) && !@game.started? %>
 
 <% if @game.started? and current_user.acting?(@game) %>
-  <%= link_to 'Build hex', new_build_path(@game) %>
-  <%= link_to 'Auction a share', new_auction_path(@game) %>
+  <% if @game.phase?(:choose_action) %>
+    <%= link_to 'Build hex', new_build_path(@game) %>
+    <%= link_to 'Auction a share', new_auction_path(@game) %>
+  <% elsif @game.phase?(:bidding) %>
+    <%= link_to 'Bid for share', new_bid_path(@game) %>
+  <% end %>
 <% else %>
-  <%= link_to 'Start game', start_game_path(@game), data: {turbo_method: :post } if @game.owner == current_user %>
+  <%= link_to 'Start game', start_game_path(@game), data: {turbo_method: :post } if @game.owner == current_user and not @game.started? %>
 <% end %>
 <%= render @game %>
 

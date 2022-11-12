@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 
   get  'games/:game_id/new_auction', to: "auctions#new_auction", as: 'new_auction'
   post 'games/:game_id/start_auction', to: "auctions#start", as: "start_auction"
+
+  get  'games/:game_id/new_bid', to: "auctions#new_bid", as: "new_bid"
   post 'games/:game_id/bid', to: "auctions#bid", as: "bid"
   post 'games/:game_id/pass', to: "auctions#pass", as: "pass"
 

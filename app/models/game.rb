@@ -26,6 +26,7 @@ class Game < ApplicationRecord
   end
   # saves all dirty attributes on object
   def next_turn!
+    state["phase"] = :choose_action
     state["acting_seat"] = (state["acting_seat"] + 1) % number_of_players
     save
   end
@@ -86,7 +87,7 @@ class Game < ApplicationRecord
   end
 
   def pass_auction(passer, auction)
-    state['passers'] << passer
+    state['passers'] << passer.seat_in(self)
     save
 
     # check auction end
@@ -112,11 +113,12 @@ class Game < ApplicationRecord
   def auction_over!(auction)
     # reduce winner money
     high_bidder_seat = state['high_bidder'].to_s
-    state['players'][high_bidder_seat]['money'] = state['players'][high_bidder_seat]['money'] - state['high_bid']
+    state['players'][high_bidder_seat]['money'] = state['players'][high_bidder_seat]['money'] - state['high_bid'].to_i
     # add share to player
     state['players'][high_bidder_seat]['shares'] << auction.company
     # change phase to action choosing
     state["phase"] = :choose_action
+    save
     # advance acting player by one
     next_turn!
   end

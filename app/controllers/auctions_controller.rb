@@ -17,10 +17,31 @@ class AuctionsController < ApplicationController
     end
   end
 
+  def new_bid
+  end
+
   def bid
+    auction_action = Auction.new(current_user, @game, params[:company], params[:bid])
+    respond_to do |format|
+      if auction_action.valid?
+        @game.bid_auction!(current_user, auction_action)
+        format.html { redirect_to game_url(@game), notice: 'Bade' }
+      else
+        format.html { render 'new_bid', status: :unprocessable_entity }
+      end
+    end
   end
 
   def pass
+    auction_action = Auction.new(current_user, @game, params[:company], -1 )
+    respond_to do |format|
+      if auction_action.valid?
+        @game.pass_auction(current_user, auction_action)
+        format.html { redirect_to game_url(@game), notice: 'Passed' }
+      else
+        format.html { redirect_to 'new_bid', status: :unprocessable_entity }
+      end
+    end
   end
 
   private

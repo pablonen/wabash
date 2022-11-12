@@ -1,0 +1,38 @@
+<%= form_with url: bid_path(@game) do |form| %>
+  <div>
+    <%= form.label :company, style: "display: none" %>
+    <%= form.hidden_field :company, value: @game.state['auction'] %>
+  </div>
+
+  <div>
+    <%= form.label :bid, style: "display: block" %>
+    <%= form.number_field :bid, in: @game.state['high_bid'].to_i..100 %>
+  </div>
+
+  <div>
+    <%= form.submit 'Bid' %>
+  </div>
+<% end %>
+
+<%= form_with url: pass_path(@game) do |form| %>
+  <div>
+    <%= form.label :company, style: "display: none" %>
+    <%= form.hidden_field :company, value: @game.state['auction'] %>
+  </div>
+
+  <div>
+    <%= form.submit 'Pass' %>
+  </div>
+<% end %>
+
+<% if @game.errors.any? %>
+  <div style="color: red">
+    <h2><%= pluralize(@game.errors.count, "error") %> prohibited this game from being saved:</h2>
+
+    <ul>
+      <% @game.errors.each do |error| %>
+        <li><%= error.full_message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
