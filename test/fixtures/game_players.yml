@@ -3,9 +3,9 @@
 one:
   game: one
   user: one
-  seat: 1
+  seat: 0
 
 two:
-  game: two
+  game: one
   user: two
   seat: 1

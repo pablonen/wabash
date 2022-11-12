@@ -24,7 +24,7 @@ class Game < ApplicationRecord
     state["hexes"][hex]["built"] = true
     save
   end
-
+  # saves all dirty attributes on object
   def next_turn!
     state["acting_seat"] = (state["acting_seat"] + 1) % number_of_players
     save
@@ -35,39 +35,146 @@ class Game < ApplicationRecord
   end
 
   def start!
+    state[:phase] = :choose_action
+    state[:acting_seat] = 0
     starting_money = 120 / players.size
 
     state[:players] = {}
     game_players.pluck(:seat).each do |seat|
-      state[:players][seat] = {money: starting_money, shares: {}}
+      state[:players][seat] = {money: starting_money, shares: [] }
     end
     # updates other dirty attributes on the object, in this case money of
     # the players in state
     update_attribute(:started, DateTime.now)
   end
 
+  def phase
+    state['phase']
+  end
+
+  def phase?(phase)
+    state["phase"] == phase.to_s
+  end
+
+  def can_auction?
+    state['phase'] == 'choose_action' || state['phase'] == 'bidding'
+  end
+
+  def start_auction!(auction)
+    state[:phase] = :bidding
+    state[:auction] = auction.company
+    state[:high_bid] = auction.bid
+    state[:high_bidder] = auction.actor.seat_in(auction.game)
+    state[:bidding_seat] = (state[:high_bidder] + 1) % number_of_players
+    state[:passers] = []
+    save
+  end
+
+  # advances bidding_seat to the next bidder, need to check for auction end before calling
+  def next_bidder!(current_actor)
+    # TODO, implement skipping passed players
+    state['bidding_seat'] = (state['bidding_seat'] +1 ) % number_of_players
+    save
+  end
+
+  def high_bid
+    state['high_bid']
+  end
+
+  def high_bidder
+    state['high_bidder']
+  end
+
+  def pass_auction(passer, auction)
+    state['passers'] << passer
+    save
+
+    # check auction end
+    if auction_over? auction
+      auction_over! auction
+    else
+      next_bidder! passer
+    end
+  end
+
+  def bid_auction!(bidder, auction)
+    # record higher bid
+    state['high_bid'] = auction.bid
+    state['high_bidder'] = auction.actor.seat_in(auction.game)
+    # next bidder
+    next_bidder! bidder
+  end
+
+  def auction_over?(auction)
+    state['passers'].size + 1 == number_of_players
+  end
+
+  def auction_over!(auction)
+    # reduce winner money
+    high_bidder_seat = state['high_bidder'].to_s
+    state['players'][high_bidder_seat]['money'] = state['players'][high_bidder_seat]['money'] - state['high_bid']
+    # add share to player
+    state['players'][high_bidder_seat]['shares'] << auction.company
+    # change phase to action choosing
+    state["phase"] = :choose_action
+    # advance acting player by one
+    next_turn!
+  end
+
   def number_of_players
     players.size
+  end
+
+  def available_companies
+    state["companies"].reduce([]) do |available, (color, data)|
+      if !data["shares"].zero? && data["started"]
+        available << color
+      end
+      available
+    end
   end
 
   def user_acting?(user)
     return false if game_players.empty?
     return false unless players.include? user
-    seat_acting = acting_seat
-    user_seat = game_players.find_by(user: user).seat
+    if phase?(:bidding)
+      seat_acting = bidding_seat
+    else
+      seat_acting = acting_seat
+    end
+    user_seat = user.seat_in(self)
     user_seat == seat_acting
+  end
+
+  def player_money(user)
+    player_seat = user.seat_in(self).to_s
+    state['players'][player_seat]['money']
+  end
+
+  def player_shares(user)
+    player_seat = user.seat_in(self).to_s
+    state['players'][player_seat]['shares']
   end
 
   def build_cost(hex)
     state["hexes"].dig(hex, "cost") || 0
   end
 
-  # Initializes the acting seat to state, I was too tired to create a
-  # migration for adding the piece of state to the db default
   def acting_seat
-    return state["acting_seat"] unless state["acting_seat"].nil?
-    state["acting_seat"] = 0
-    save
+    if phase?(:bidding)
+      seat = "bidding_seat"
+    else
+      seat = "acting_seat"
+    end
+    state[seat]
+  end
+
+  def acting_player
+    game_players.find_by(seat: acting_seat).user
+  end
+
+  def bidding_seat
+    return state["bidding_seat"]
   end
 
   def coordinate(i,j)
