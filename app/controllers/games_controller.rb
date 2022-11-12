@@ -38,7 +38,7 @@ class GamesController < ApplicationController
     @user = User.find(params[:user_id])
     respond_to do |format|
       unless @user.in_game?(@game)
-        @user.game_players.create(game: @game, seat: @game.players.size)
+        @user.join_in(@game)
         format.html { redirect_to game_url(@game), notice: "you joined the game!" }
       else
         format.html { redirect_to game_url(@game), notice: "already joined in game!" }
