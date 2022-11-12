@@ -19,7 +19,6 @@ class BuildsController < ApplicationController
         @game.next_turn!
         format.html { redirect_to game_url(@game), notice: "built!"}
       else
-        # TODO
         format.html { render 'games/new_build', status: :unprocessable_entity }
       end
     end
