@@ -116,6 +116,9 @@ class Game < ApplicationRecord
     state['players'][high_bidder_seat]['money'] = state['players'][high_bidder_seat]['money'] - state['high_bid'].to_i
     # add share to player
     state['players'][high_bidder_seat]['shares'] << auction.company
+    # add money to the company
+    state['companies'][state['auction']]['money'] += state['high_bid'].to_i
+
     # change phase to action choosing
     state["phase"] = :choose_action
     save

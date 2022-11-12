@@ -55,5 +55,7 @@ class GameTest < ActiveSupport::TestCase
 
     assert @user1.money(@game) == 60-5
     assert @user1.shares(@game) == ['red']
+
+    assert @game.state['companies']['red']['money'] == 5
   end
 end
