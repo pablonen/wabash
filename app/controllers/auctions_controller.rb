@@ -6,9 +6,9 @@ class AuctionsController < ApplicationController
   end
 
   def start
-    auction = Auction.new(current_user, @game, params[:company], params[:bid])
+    auction = Auction.new(current_user, @game, params[:company], params[:bid].to_i, starting_bid: true)
     respond_to do |format|
-      if auction.valid?
+      if auction.valid_start?
         @game.start_auction!(auction)
         format.html { redirect_to game_url(@game), notice: 'Auction started' }
       else
@@ -33,9 +33,9 @@ class AuctionsController < ApplicationController
   end
 
   def pass
-    auction_action = Auction.new(current_user, @game, params[:company], -1 )
+    auction_action = Auction.new(current_user, @game, params[:company], pass: true )
     respond_to do |format|
-      if auction_action.valid?
+      if auction_action.valid_pass?
         @game.pass_auction(current_user, auction_action)
         format.html { redirect_to game_url(@game), notice: 'Passed' }
       else

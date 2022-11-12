@@ -2,20 +2,34 @@
 # TODO, rename to AuctionAction
 class Auction
   extend ActiveModel::Naming
-  def initialize(acting_user, game, company, bid)
+  def initialize(acting_user, game, company, bid, starting_bid: false, pass: false)
     @actor = acting_user
     @game = game
     @company = company
     @bid = bid
     @phase = @game.phase
     @errors = ActiveModel::Errors.new(self)
+    @pass = pass
+    @starting_bid = starting_bid
   end
 
-  attr_accessor :actor, :game, :company, :bid, :phase
+  attr_accessor :actor, :game, :company, :bid, :phase, :pass, :starting_bid
   attr_reader :errors
 
   def valid?
     on_phase? &&
+    on_turn? &&
+    valid_bid? &&
+    sufficient_money?
+  end
+
+  def valid_pass?
+    true
+  end
+
+  def valid_start?
+    on_phase? &&
+    on_turn? &&
     sufficient_money?
   end
 
@@ -26,8 +40,21 @@ class Auction
     @game.can_auction?
   end
 
+  def on_turn?
+    @game.errors.add(:base, "Not your turn to big") unless @game.user_acting?(@actor)
+    @game.user_acting?(@actor)
+  end
+
   def sufficient_money?
-    true 
+    @game.errors.add(:base, "Not enough money for bid") if @game.player_money(@actor) > bid
+    @game.player_money(@actor) > bid
+  end
+
+  # TODO, implement minimum bid rules
+  def valid_bid?
+    return true if @starting_bid
+    @game.errors.add(:base, "Bid must be higher than going price") if @bid < @game.state['high_bid']
+    @bid < @game.state['high_bid']
   end
   # Implementation boilerplate see https://api.rubyonrails.org/v7.0.4/classes/ActiveModel/Errors.html 
   def read_attribute_for_validation(attr)
