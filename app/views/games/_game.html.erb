@@ -36,9 +36,21 @@
     </ol>
   </p>
 
+  <% if @game.started? %>
+    <p>
+      <strong>Acting:</strong>
+      <%= @game.acting_player.id %>
+    </p>
+  <% end %>
+  <p>
+    <strong>Phase:</strong>
+    <%= @game.phase %>
+  </p>
   <p>
     <strong>State:</strong>
-    <%= game.state %>
+    <pre>
+      <%= JSON.pretty_generate(game.state.except('hexes')) %>
+    </pre>
   </p>
 
   <p>
