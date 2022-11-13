@@ -55,6 +55,14 @@ article.company {
   padding: 1em;
 }
 
+.sheet dt::after {
+  content: ": ";
+}
+
+.sheet dd.money::after {
+  content: " $"
+}
+
 .company.red header {
   background-color: brown;
 }
