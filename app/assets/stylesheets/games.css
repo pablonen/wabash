@@ -32,3 +32,27 @@ use.city {
 use.mountain {
   fill: #a9a9a9;
 }
+
+.company-container {
+  display: flex;
+  gap: 1em;
+}
+
+.company {
+  border-radius: 1em;
+  padding: 1em;
+}
+
+.company.red {
+  background-color: brown;
+}
+
+.company.blue {
+  background-color: dodgerblue;
+}
+.company.green {
+  background-color: darkolivegreen;
+}
+.company.yellow {
+  background-color: goldenrod;
+}

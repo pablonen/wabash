@@ -18,6 +18,7 @@
     <strong>Owner:</strong>
     <%= game.owner.id %>
   </p>
+  <%= render 'companies' if @game.started? %>
 
   <p>
       <strong>Started:</strong>
@@ -55,6 +56,6 @@
 
   <p>
     <strong>Board:</strong>
-    <%= render 'board', locals: {game: @game} %>
+    <%= render 'board' %>
   </p>
 </div>

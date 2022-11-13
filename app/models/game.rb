@@ -182,6 +182,10 @@ class Game < ApplicationRecord
     return state["bidding_seat"]
   end
 
+  def companies
+    state['companies']
+  end
+
   def coordinate(i,j)
     COL_ALPHA[i]+j.to_s
   end
