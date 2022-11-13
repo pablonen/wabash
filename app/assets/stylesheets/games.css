@@ -35,24 +35,36 @@ use.mountain {
 
 .company-container {
   display: flex;
-  gap: 1em;
+  column-gap: 1em;
 }
 
-.company {
+article.company {
   border-radius: 1em;
+  overflow: hidden;
+  line-height: 1.5em;
+}
+
+.company header {
+  justify-content: center;
+  display: flex;
+}
+
+.company .sheet {
+  background-color: antiquewhite;
+  margin: 0em;
   padding: 1em;
 }
 
-.company.red {
+.company.red header {
   background-color: brown;
 }
 
-.company.blue {
+.company.blue header {
   background-color: dodgerblue;
 }
-.company.green {
+.company.green header {
   background-color: darkolivegreen;
 }
-.company.yellow {
+.company.yellow header {
   background-color: goldenrod;
 }
