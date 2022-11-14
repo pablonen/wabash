@@ -7,14 +7,24 @@
     </defs>
     <g class="hex-wrap">
       <% @game.grid_enumerator do |h| %>
-        <use href="#hex" transform="translate(<%=h.x%>,<%=h.y%>)" class="<%= h.type %>" /> 
-        <% if h.built %>
-          <% h.built.each_with_index do |color, i| %>
-            <rect x="<%=(h.x-7) + i*4 %>" y="<%=h.y-2%>" width=3 height=3 fill="<%= color %>" />
-          <% end %>
+
+        <% if h.column_first %>
+          <text class="coord" x="<%= h.x - 2 %>" y="<%= h.y - Game::HEX_H + 4 %>" ><%= Game::COL_ALPHA[h.i] %></text>
         <% end %>
-        <text class="cost" x="<%=h.x-5 %>" y="<%=h.y-4%>">-<%= h.build_cost %></text>
-      <% end %> 
+        <% if h.row_first %>
+          <text class="coord" x="<%= 0 %>" y="<%= h.y + Game::HEX_W / 2 - 5 %>" ><%= h.j %></text>
+        <% end %>
+
+        <% if h.draw %>
+          <use href="#hex" transform="translate(<%=h.x%>,<%=h.y%>)" class="<%= h.type %>" />
+          <% if h.built %>
+            <% h.built.each_with_index do |color, i| %>
+              <rect x="<%=(h.x-7) + i*4 %>" y="<%=h.y-2%>" width=3 height=3 fill="<%= color %>" />
+            <% end %>
+          <% end %>
+          <text class="cost" x="<%=h.x-5 %>" y="<%=h.y-4%>">-<%= h.build_cost %></text>
+        <% end %>
+      <% end %>
     </g>
   </svg>
 </div>

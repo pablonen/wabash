@@ -202,7 +202,6 @@ class Game < ApplicationRecord
   def grid_enumerator
     (HEX_W..HEX_W*MAP_COLS).step(HEX_W).each_with_index do |x, i|
       (HEX_H..HEX_H*MAP_ROWS).step(HEX_H).each_with_index do |y, j|
-        next unless state["hexes"][coordinate(i,j)]
         if i % 2 == 1
           y = y + HEX_H / 2
         end
@@ -211,7 +210,11 @@ class Game < ApplicationRecord
         hex_build_cost = build_cost(hex_id)
         hex_type = hex_type(hex_id)
 
-        yield Hex.new(x,y,i,j,hex_id,hex_type,hex_build_cost, hex_built)
+        column_first = j.zero?
+        row_first = i.zero?
+        draw = true if state['hexes'][coordinate(i,j)]
+
+        yield Hex.new(x,y,i,j,hex_id,hex_type,hex_build_cost, hex_built, column_first, row_first, draw)
       end
     end
   end

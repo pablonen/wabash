@@ -7,6 +7,10 @@ svg.board {
   fill: red;
 }
 
+.hex-wrap text.coord {
+  font: 4px sans-serif;
+}
+
 use.undefined {
   fill: #000080;
 }

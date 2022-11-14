@@ -47,15 +47,16 @@
     <strong>Phase:</strong>
     <%= @game.phase %>
   </p>
+
+  <p>
+    <strong>Board:</strong>
+    <%= render 'board' %>
+  </p>
+
   <p>
     <strong>State:</strong>
     <pre>
       <%= JSON.pretty_generate(game.state.except('hexes')) %>
     </pre>
-  </p>
-
-  <p>
-    <strong>Board:</strong>
-    <%= render 'board' %>
   </p>
 </div>
