@@ -1,5 +1,5 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
+# game 1
 one:
   game: one
   user: one
@@ -9,3 +9,20 @@ two:
   game: one
   user: two
   seat: 1
+
+# game 2
+
+three:
+  game: two
+  user: one
+  seat: 0
+
+four:
+  game: two
+  user: two
+  seat: 1
+
+five:
+  game: two
+  user: three
+  seat: 2

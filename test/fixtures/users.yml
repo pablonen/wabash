@@ -12,3 +12,6 @@ two:
   email: tester2@tester.afaf
   encrypted_password: <%= User.new.send(:password_digest, 'password2') %>
 
+three:
+  email: tester3@tester.afaf
+  encrypted_password: <%= User.new.send(:password_digest, 'password3') %>

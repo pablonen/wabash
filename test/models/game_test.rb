@@ -3,9 +3,12 @@ require "test_helper"
 class GameTest < ActiveSupport::TestCase
   setup do
     @game = games(:one)
+    @game2 = games(:two)
     @user1 = users(:one)
     @user2 = users(:two)
+    @user3 = users(:three)
     @game.start!
+    @game2.start!
     @auction = Auction.new(@user1, @game, 'red', 3)
   end
 
@@ -19,7 +22,7 @@ class GameTest < ActiveSupport::TestCase
     assert @game.user_acting?(@user1), "user1 is not acting on game start"
     @game.start_auction! @auction
     assert @game.user_acting?(@user2)
-    @game.pass_auction(@user2, @auction) 
+    @game.pass_auction!(@user2, @auction)
     assert @game.user_acting?(@user2), "user2 should be acting after user1 passes and gets the company"
     assert @game.phase?(:choose_action), "the auction is over and the user2 is up to choose an action"
   end
@@ -48,7 +51,7 @@ class GameTest < ActiveSupport::TestCase
     assert @game.high_bidder == @user1.seat_in(@game)
 
     auction_pass = Auction.new(@user2, @game, 'red', -1)
-    @game.pass_auction(@user2, auction_pass)
+    @game.pass_auction!(@user2, auction_pass)
     assert @game.state['passers'] = [@user2.id]
     assert @game.phase?(:choose_action)
     assert @game.user_acting?(@user2)
@@ -57,5 +60,25 @@ class GameTest < ActiveSupport::TestCase
     assert @user1.shares(@game) == ['red']
 
     assert @game.state['companies']['red']['money'] == 5
+  end
+
+  test 'multiplayer passing' do
+    assert @game2.user_acting?(@user1)
+    start_auction = Auction.new(@user1, @game2, 'red', 4, starting_bid: true)
+    @game2.start_auction! start_auction
+    assert @game2.user_acting?(@user2)
+    pass_auction = Auction.new(@user2, @game2, 'red', -1, pass: true)
+    @game2.pass_auction! @user2, pass_auction
+    assert @game2.user_acting?(@user3)
+
+    bid_auction1 = Auction.new(@user3, @game2, 'red', 5)
+    @game2.bid_auction! @user3, bid_auction1
+    assert @game2.user_acting? @user1
+
+    bid_auction2 = Auction.new(@user1, @game2, 'red', 6)
+    @game2.bid_auction! @user1, bid_auction2
+
+    assert @game2.user_acting?(@user3), "user2 has passed and should not be bidding now"
+    assert !(@game2.user_acting?(@user2)), "user2 has passed and should not be bidding now"
   end
 end

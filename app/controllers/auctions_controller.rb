@@ -37,7 +37,7 @@ class AuctionsController < ApplicationController
     auction_action = Auction.new(current_user, @game, params[:company], -1, pass: true )
     respond_to do |format|
       if auction_action.valid_pass?
-        @game.pass_auction(current_user, auction_action)
+        @game.pass_auction!(current_user, auction_action)
         format.html { redirect_to game_url(@game), notice: 'Passed' }
       else
         format.html { redirect_to 'new_bid', status: :unprocessable_entity }

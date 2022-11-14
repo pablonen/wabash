@@ -72,10 +72,15 @@ class Game < ApplicationRecord
   end
 
   # advances bidding_seat to the next bidder, need to check for auction end before calling
+  # TODO, refactor the argument away
   def next_bidder!(current_actor)
-    # TODO, implement skipping passed players
     state['bidding_seat'] = (state['bidding_seat'] +1 ) % number_of_players
     save
+    next_bidder!(current_actor) if state['passers'].include?(acting_seat)
+  end
+
+  def player_on_seat(seat)
+    game_players.find_by_seat(seat).user
   end
 
   def high_bid
@@ -86,7 +91,7 @@ class Game < ApplicationRecord
     state['high_bidder']
   end
 
-  def pass_auction(passer, auction)
+  def pass_auction!(passer, auction)
     state['passers'] << passer.seat_in(self)
     save
 
