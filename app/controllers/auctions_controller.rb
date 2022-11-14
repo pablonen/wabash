@@ -6,7 +6,7 @@ class AuctionsController < ApplicationController
   end
 
   def start
-    auction = Auction.new(current_user, @game, params[:company], params[:bid].to_i, starting_bid: true)
+    auction = Auction.new(current_user, @game, params[:auction][:company], params[:auction][:bid].to_i, starting_bid: true)
     respond_to do |format|
       if auction.valid_start?
         @game.start_auction!(auction)

@@ -24,13 +24,15 @@ class Auction
   end
 
   def valid_pass?
-    true
+    on_bidding_phase? &&
+    on_turn?
   end
 
   def valid_start?
     on_start_auction_phase? &&
     on_turn? &&
-    sufficient_money?
+    sufficient_money? &&
+    shares_left?
   end
 
   # cannot start an auction on build/dev/bidding phase
@@ -59,6 +61,14 @@ class Auction
   def valid_bid?
     @game.errors.add(:base, "Bid must be higher than going price") if @bid < @game.state['high_bid'].to_i
     @bid > @game.state['high_bid']
+  end
+
+  def shares_left?
+    shares_left = @game.state['companies'][@company]['shares'].nonzero?
+    unless shares_left
+      @game.errors.add(:base, "Company #{@company} has no shares to auction")
+    end
+    shares_left
   end
   # Implementation boilerplate see https://api.rubyonrails.org/v7.0.4/classes/ActiveModel/Errors.html 
   def read_attribute_for_validation(attr)
