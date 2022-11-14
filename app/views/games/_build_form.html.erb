@@ -1,3 +1,4 @@
+<%= link_to 'Back to game', game_path(@game) %>
 <%= form_with url: game_builds_path do |form| %>
   <% if @game.errors.any? %>
     <div style="color: red">
@@ -10,13 +11,16 @@
       </ul>
     </div>
   <% end %>
+  <div data-controller="hex" data-hex-selected-class="selected">
+    <%= render 'games/board' %>
+    <div>
+      <%= form.text_field "hex[]", {data: { 'hex-target'=> 'input'}} %>
+      <%= form.text_field "hex[]", {data: { 'hex-target'=> 'input'}} %>
+      <%= form.text_field "hex[]", {data: { 'hex-target'=> 'input'}} %>
+    </div>
 
-  <div>
-    <%= form.label :hex, style: "display: block" %>
-    <%= form.select :hex, @game.state["hexes"].keys.map { |hex| [hex,hex] } %>
-  </div>
-
-  <div>
-    <%= form.submit 'Build' %>
+    <div>
+      <%= form.submit 'Build' %>
+    </div>
   </div>
 <% end %>

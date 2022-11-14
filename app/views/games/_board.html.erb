@@ -1,5 +1,6 @@
-<div data-controller="hex">
-  <svg viewBox="0 0 450 300" class="board">
+<div>
+  <span></span>
+  <svg viewBox="0 0 300 210" class="board">
     <defs>
       <g id="hex">
         <polygon points="5, -9 -5,-9 -10, 0 -5, 9 5, 9 10, 0" />
@@ -16,7 +17,7 @@
         <% end %>
 
         <% if h.draw %>
-          <use href="#hex" transform="translate(<%=h.x%>,<%=h.y%>)" class="<%= h.type %>" />
+          <use href="#hex" transform="translate(<%=h.x%>,<%=h.y%>)" class="<%= h.type %>" data-action="click->hex#hex_click" id="<%= h.coordinate %>" />
           <% if h.built %>
             <% h.built.each_with_index do |color, i| %>
               <rect x="<%=(h.x-7) + i*4 %>" y="<%=h.y-2%>" width=3 height=3 fill="<%= color %>" />
