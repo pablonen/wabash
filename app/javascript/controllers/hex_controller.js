@@ -22,7 +22,6 @@ export default class extends Controller {
     }
 
     this.hexesValue = Array.from(new Set(new_hexes))
-    console.log(this.hexesValue)
   }
 
   hexesValueChanged() {

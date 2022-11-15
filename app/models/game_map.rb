@@ -400,6 +400,6 @@ class GameMap
    :blue=>{:started=>true, :money=>0, :shares=>4, :track=>21, :start_hex=>"Q7"},
    :green=>{:started=>true, :money=>0, :shares=>5, :track=>23, :start_hex=>"S3"},
    :yellow=>{:started=>true, :money=>0, :shares=>6, :track=>25, :start_hex=>"Q9"},
-   :black=>{:started=>false, :money=>0, :shares=>2, :track=>11, :start_Hex=>"D3"}}}
+   :black=>{:started=>false, :money=>0, :shares=>2, :track=>11, :start_hex=>"D3"}}}
 
 end

@@ -11,6 +11,10 @@
       </ul>
     </div>
   <% end %>
+  <div>
+    <%= form.label :company %>
+    <%= form.select :company, @game.available_companies_for_building(current_user).map { |c| [c,c] } %>
+  </div>
   <div data-controller="hex" data-hex-selected-class="selected">
     <%= render 'games/board' %>
     <div>

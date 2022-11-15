@@ -17,7 +17,7 @@ class AuctionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should start auction on game" do
-    post start_auction_url(@game), params: { auction: { company: "red", bid: 3}}
+    post start_auction_url(@game), params: { company: "red", bid: 3}
     assert_redirected_to game_url(@game)
     @game.reload
     assert @game.user_acting?(@user2)

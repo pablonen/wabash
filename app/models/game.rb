@@ -20,10 +20,26 @@ class Game < ApplicationRecord
     user
   end
 
-  def build(hex)
-    state["hexes"][hex]["built"] = true
-    save
+  def build(build)
+    # remove company money for cost
+    state['companies'][build.company]['money'] -= build.cost
+    # build the hexes
+    build.hexes.each do |hex|
+      if state['hexes'][hex]['built'].nil?
+        state['hexes'][hex]['built'] = []
+      end
+      state['hexes'][hex]['built'] << build.company
+    end
+    # remove tracks from company
+    state['companies'][build.company]['track'] -= build.hexes.size
+    # next turn
+    next_turn!
   end
+
+  def build_cost_for(hexes)
+    state['hexes'].slice(*hexes).map { |_, data| data['cost'].to_i }.sum
+  end
+
   # saves all dirty attributes on object
   def next_turn!
     state["phase"] = :choose_action
@@ -44,6 +60,7 @@ class Game < ApplicationRecord
     game_players.pluck(:seat).each do |seat|
       state[:players][seat] = {money: starting_money, shares: [] }
     end
+
     # updates other dirty attributes on the object, in this case money of
     # the players in state
     update_attribute(:started, DateTime.now)
@@ -121,6 +138,8 @@ class Game < ApplicationRecord
     state['players'][high_bidder_seat]['money'] = state['players'][high_bidder_seat]['money'] - state['high_bid'].to_i
     # add share to player
     state['players'][high_bidder_seat]['shares'] << auction.company
+    # reduce company share count
+    state['companies'][auction.company]['shares'] -= 1
     # add money to the company
     state['companies'][state['auction']]['money'] += state['high_bid'].to_i
 
@@ -135,12 +154,22 @@ class Game < ApplicationRecord
     players.size
   end
 
+  # TODO, rename to available_companies_for_auction
   def available_companies
     state["companies"].reduce([]) do |available, (color, data)|
       if !data["shares"].zero? && data["started"]
         available << color
       end
       available
+    end
+  end
+
+  def available_companies_for_building(user)
+    # TODO, shouldnt return nils ?
+    user.shares(self).uniq.reduce([]) do |available, company|
+      if state["companies"][company]['track'].nonzero? && state["companies"][company]['money'].positive?
+        available << company
+      end
     end
   end
 
