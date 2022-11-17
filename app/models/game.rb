@@ -25,12 +25,6 @@ class Game < ApplicationRecord
     state['companies'][build.company]['money'] -= build.cost
     # build the hexes
     build.hexes.each do |hex|
-      if state['hexes'][hex]['built'].nil?
-        state['hexes'][hex]['built'] = []
-      end
-      if state['companies'][build.company]['built_track'].nil?
-        state['companies'][build.company]['built_track'] = []
-      end
       state['hexes'][hex]['built'] << build.company
       state['companies'][build.company]['built_track'] << hex
     end
@@ -58,10 +52,7 @@ class Game < ApplicationRecord
   end
 
   def company_built_tracks(company)
-    if state['companies'][company]['built_track'].nil?
-      return [state['companies'][company]['start_hex']]
-    end
-    state['companies'][company]['built_track'] + [state['companies'][company]['start_hex']]
+    state['companies'][company]['built_track']
   end
 
   def build_cost_for(hexes)
@@ -258,6 +249,10 @@ class Game < ApplicationRecord
     state["hexes"].dig(hex, "type") || "undefined" 
   end
 
+  def hex_income(hex)
+    state["hexes"].dig(hex,"income") || "as"
+  end
+
   def grid_enumerator
     (HEX_W..HEX_W*MAP_COLS).step(HEX_W).each_with_index do |x, i|
       (HEX_H..HEX_H*MAP_ROWS).step(HEX_H).each_with_index do |y, j|
@@ -268,12 +263,13 @@ class Game < ApplicationRecord
         hex_built = built?(hex_id)
         hex_build_cost = build_cost(hex_id)
         hex_type = hex_type(hex_id)
+        hex_income = hex_income(hex_id)
 
         column_first = j.zero?
         row_first = i.zero?
         draw = true if state['hexes'][coordinate(i,j)]
 
-        yield Hex.new(x,y,i,j,hex_id,hex_type,hex_build_cost, hex_built, column_first, row_first, draw)
+        yield Hex.new(x,y,i,j,hex_id,hex_type,hex_build_cost, hex_built, column_first, row_first, draw, hex_income)
       end
     end
   end

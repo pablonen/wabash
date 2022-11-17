@@ -24,6 +24,9 @@
             <% end %>
           <% end %>
           <text class="cost" x="<%=h.x-5 %>" y="<%=h.y-4%>">-<%= h.build_cost %></text>
+          <% unless h.income == "0" %>
+            <text class="income" x="<%=h.x+1%>" y="<%=h.y-4%>"><%= h.income %></text>
+          <% end %>
         <% end %>
       <% end %>
     </g>

@@ -8,6 +8,12 @@ svg.board {
   pointer-events: none;
 }
 
+.hex-wrap text.income {
+  font: 4px sans-serif;
+  fill: green;
+  pointer-events: none;
+}
+
 .hex-wrap text.coord {
   font: 4px sans-serif;
 }
