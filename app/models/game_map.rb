@@ -23,11 +23,11 @@ class GameMap
   end
 
   COMPANIES = {
-    red: { started: true, money: 0, shares: 3, track: 19, start_hex: 'R5', built_track: ['R5'] },
-    blue: { started: true, money: 0, shares: 4, track: 21, start_hex: 'Q7', built_track: ['Q7'] },
-    green: { started: true, money: 0, shares: 5, track: 23, start_hex: 'S3', built_track: ['S3'] },
-    yellow: { started: true, money: 0, shares: 6, track: 25, start_hex: 'Q9', built_track: ['Q9'] },
-    black: { started: false, money: 0, shares: 2, track: 11, start_hex: 'D3', built_track: []}
+    red: { started: true, money: 0, shares: 3, track: 19, start_hex: 'R5', built_track: ['R5'], income: 7 },
+    blue: { started: true, money: 0, shares: 4, track: 21, start_hex: 'Q7', built_track: ['Q7'], income: 6 },
+    green: { started: true, money: 0, shares: 5, track: 23, start_hex: 'S3', built_track: ['S3'], income: 5 },
+    yellow: { started: true, money: 0, shares: 6, track: 25, start_hex: 'Q9', built_track: ['Q9'], income: 8 },
+    black: { started: false, money: 0, shares: 2, track: 11, start_hex: 'D3', built_track: [], income: 0 }
   }
 
   TYPE_BY_COLUMN = 
@@ -586,9 +586,9 @@ class GameMap
    "S4"=>{:type=>:field, :cost=>"1", :income=>"0", :built=>[]},
    "S5"=>{:type=>:field, :cost=>"1", :income=>"0", :built=>[]}},
  :companies=>
-  {:red=>{:started=>true, :money=>0, :shares=>3, :track=>19, :start_hex=>"R5", :built_track=>["R5"]},
-   :blue=>{:started=>true, :money=>0, :shares=>4, :track=>21, :start_hex=>"Q7", :built_track=>["Q7"]},
-   :green=>{:started=>true, :money=>0, :shares=>5, :track=>23, :start_hex=>"S3", :built_track=>["S3"]},
-   :yellow=>{:started=>true, :money=>0, :shares=>6, :track=>25, :start_hex=>"Q9", :built_track=>["Q9"]},
-   :black=>{:started=>false, :money=>0, :shares=>2, :track=>11, :start_hex=>"D3", :built_track=>[]}}}
+  {:red=>{:started=>true, :money=>0, :shares=>3, :track=>19, :start_hex=>"R5", :built_track=>["R5"], :income=>7},
+   :blue=>{:started=>true, :money=>0, :shares=>4, :track=>21, :start_hex=>"Q7", :built_track=>["Q7"], :income=>6},
+   :green=>{:started=>true, :money=>0, :shares=>5, :track=>23, :start_hex=>"S3", :built_track=>["S3"], :income=>5},
+   :yellow=>{:started=>true, :money=>0, :shares=>6, :track=>25, :start_hex=>"Q9", :built_track=>["Q9"], :income=>8},
+   :black=>{:started=>false, :money=>0, :shares=>2, :track=>11, :start_hex=>"D3", :built_track=>[], :income=>0}}}
 end
