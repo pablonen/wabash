@@ -36,6 +36,7 @@ class Game < ApplicationRecord
     end
     # remove tracks from company
     state['companies'][build.company]['track'] -= build.hexes.size
+    # TODO, increase the hex cost here? or in build_cost_for ?
     # next turn
     next_turn!
   end
@@ -64,7 +65,9 @@ class Game < ApplicationRecord
   end
 
   def build_cost_for(hexes)
-    state['hexes'].slice(*hexes).map { |_, data| data['cost'].to_i }.sum
+    state['hexes'].slice(*hexes).map do |_, data|
+      data['cost'].to_i
+    end.sum
   end
 
   # saves all dirty attributes on object
