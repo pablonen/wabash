@@ -28,12 +28,39 @@ class Game < ApplicationRecord
       if state['hexes'][hex]['built'].nil?
         state['hexes'][hex]['built'] = []
       end
+      if state['companies'][build.company]['built_track'].nil?
+        state['companies'][build.company]['built_track'] = []
+      end
       state['hexes'][hex]['built'] << build.company
+      state['companies'][build.company]['built_track'] << hex
     end
     # remove tracks from company
     state['companies'][build.company]['track'] -= build.hexes.size
     # next turn
     next_turn!
+  end
+
+  # params need to be in axial since the method is recursive
+  def builds_adjacent_to_track?(hexes_to_be_built, company_built_hexes)
+    return true if hexes_to_be_built.empty?
+
+    built_tracks_neighbours = company_built_hexes.flat_map do |hex|
+      HexPathfinding.neighbours(hex)
+    end
+
+    confirmed_builds, yet_to_be_confirmed = hexes_to_be_built.partition do |to_be_built|
+      built_tracks_neighbours.include? to_be_built
+    end
+
+    return false if confirmed_builds.empty?
+    return builds_adjacent_to_track?( yet_to_be_confirmed, company_built_hexes + confirmed_builds )
+  end
+
+  def company_built_tracks(company)
+    if state['companies'][company]['built_track'].nil?
+      return [state['companies'][company]['start_hex']]
+    end
+    state['companies'][company]['built_track'] + [state['companies'][company]['start_hex']]
   end
 
   def build_cost_for(hexes)

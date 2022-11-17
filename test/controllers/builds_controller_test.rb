@@ -54,6 +54,7 @@ class BuildsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "connects to company track" do
-    assert false
+    post game_builds_url(@game), params: { hex: ['R3'] , company: 'red' }
+    assert_response :unprocessable_entity
   end
 end

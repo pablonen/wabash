@@ -55,7 +55,19 @@ class Build
   end
 
   def connected_to_company_track?
-    true
+    axial_company_built_tracks = @game.company_built_tracks(@company).map do |hex|
+      offset_hex = HexPathfinding.destructure_hex_coordinate(hex)
+      HexPathfinding.oddq_to_axial(offset_hex)
+    end
+    axial_to_be_built = hexes.map do |hex|
+      offset_hex = HexPathfinding.destructure_hex_coordinate(hex)
+      HexPathfinding.oddq_to_axial(offset_hex)
+    end
+
+    connected = @game.builds_adjacent_to_track?(axial_to_be_built, axial_company_built_tracks)
+
+    @game.errors.add(:base, "Proposed track is not connected to the company track") unless connected
+    connected
   end
 
   # Implementation boilerplate see https://api.rubyonrails.org/v7.0.4/classes/ActiveModel/Errors.html 
