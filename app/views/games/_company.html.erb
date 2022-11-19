@@ -7,5 +7,9 @@
       <dd><%= company['shares'] %></dd>
       <dt>Tracks</dt>
       <dd><%= company['track'] %></dd>
+      <dt>Income</dt>
+      <dd><%= company['income'] %></dd>
+      <dt>Per share</dt>
+      <dd><%= @game.company_income_per_share(company[:color]) %></dd>
     </dl>
 </article>

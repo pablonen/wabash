@@ -11,6 +11,8 @@ class Game < ApplicationRecord
   HEX_DATA = {}
   COL_ALPHA = ('A'..'S').to_a
 
+  DETROIT = 'E0'
+
   def built?(hex)
     return false unless state.dig("hexes", hex, "built")
     state.dig("hexes", hex, "built")
@@ -21,6 +23,7 @@ class Game < ApplicationRecord
   end
 
   def build(build)
+    state['builds'] += 1
     # remove company money for cost
     state['companies'][build.company]['money'] -= build.cost
     # build the hexes
@@ -63,9 +66,20 @@ class Game < ApplicationRecord
 
   # saves all dirty attributes on object
   def next_turn!
+    if round_end?
+      dividend_phase!
+    end
     state["phase"] = :choose_action
     state["acting_seat"] = (state["acting_seat"] + 1) % number_of_players
     save
+  end
+
+  def round_end?
+    build_used = state['builds'] == 5
+    developments_used = state['developments'] == 4
+    auctions_used = state['auctions'] == 3
+
+    [build_used, developments_used, auctions_used].count(true) == 2
   end
 
   def started?
@@ -75,6 +89,9 @@ class Game < ApplicationRecord
   def start!
     state[:phase] = :choose_action
     state[:acting_seat] = 0
+    state[:builds] = 0
+    state[:auctions] = 0
+    state[:developments] = 0
     starting_money = 120 / players.size
 
     state[:players] = {}
@@ -100,6 +117,7 @@ class Game < ApplicationRecord
   end
 
   def start_auction!(auction)
+    state['auctions'] += 1
     state[:phase] = :bidding
     state[:auction] = auction.company
     state[:high_bid] = auction.bid
@@ -160,7 +178,7 @@ class Game < ApplicationRecord
     # add share to player
     state['players'][high_bidder_seat]['shares'] << auction.company
     # reduce company share count
-    state['companies'][auction.company]['shares'] -= 1
+    state['companies'][auction.company]['shares_sold'] += 1
     # add money to the company
     state['companies'][state['auction']]['money'] += state['high_bid'].to_i
 
@@ -175,15 +193,40 @@ class Game < ApplicationRecord
     players.size
   end
 
-  # TODO, rename to available_companies_for_auction
-  def available_companies
+  def available_companies_for_auction
     state["companies"].reduce([]) do |available, (color, data)|
-      if !data["shares"].zero? && data["started"]
+      if (data['shares'] - data.fetch('sold_shares', 0)).nonzero? && data["started"]
         available << color
       end
       available
     end
   end
+
+  def company_income_per_share(company)
+    no_sold_shares = state['companies'][company].fetch('sold_shares', 1)
+    company_income = state['companies'][company]['income'].to_i
+    (company_income / no_sold_shares.to_f).ceil
+  end
+
+  def dividend_phase!
+    # general dividends
+    state['players'].each do |seat, player_data|
+      player_data['money'] += player_data['shares'].map { |company_share| company_income_per_share(company_share) }.sum
+    end
+    # reset dials
+    state["builds"] = 0
+    state["auctions"] = 0
+    state["developments"] = 0
+    # developing detroit
+    state['hexes'][DETROIT]['income'] = state['hexes'][DETROIT]['income'].to_i + 1
+    if state['hexes'][DETROIT]['income'].to_i == 8
+      end_game!
+    else
+      next_turn!
+    end
+  end
+
+  def end_game!;end
 
   def available_companies_for_building(user)
     # TODO, shouldnt return nils ?

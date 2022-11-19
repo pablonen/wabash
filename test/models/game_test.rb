@@ -16,6 +16,7 @@ class GameTest < ActiveSupport::TestCase
     @game.start_auction! @auction
     #assert @game.bidders == [@user1.id,@user2.id], 'bidders is wrong'
     assert @game.bidding_seat == 1
+    assert @game.state['auctions'] == 1
   end
 
   test 'auction passing' do
@@ -80,5 +81,76 @@ class GameTest < ActiveSupport::TestCase
 
     assert @game2.user_acting?(@user3), "user2 has passed and should not be bidding now"
     assert !(@game2.user_acting?(@user2)), "user2 has passed and should not be bidding now"
+  end
+
+  test 'round_end?' do
+    @game.state['builds'] = 4
+    @game.state['auctions'] = 3
+    @game.state['developments'] = 4
+    assert @game.round_end?
+
+    @game.state['builds'] = 5
+    @game.state['auctions'] = 3
+    @game.state['developments'] = 0
+    assert @game.round_end?
+
+    @game.state['builds'] = 5
+    @game.state['auctions'] = 0
+    @game.state['developments'] = 4
+    assert @game.round_end?
+
+    @game.state['builds'] = 5
+    @game.state['auctions'] = 0
+    @game.state['developments'] = 1
+    assert !@game.round_end?
+
+    @game.state['builds'] = 5
+    @game.state['auctions'] = 2
+    @game.state['developments'] = 0
+    assert !@game.round_end?
+
+    @game.state['builds'] = 3
+    @game.state['auctions'] = 0
+    @game.state['developments'] = 4
+    assert !@game.round_end?
+  end
+
+  test 'dividend_phase!' do
+    @game.state['players']['0']['money'] = 0
+    @game.state['players']['1']['money'] = 0
+
+    @game.state['players']['0']['shares'] = ['red', 'blue', 'red']
+    @game.state['players']['1']['shares'] = ['yellow','green','blue', 'red']
+
+    @game.state['companies']['red']['sold_shares'] = 3
+    @game.state['companies']['blue']['sold_shares'] = 2
+    @game.state['companies']['yellow']['sold_shares'] = 1
+    @game.state['companies']['green']['sold_shares'] = 1
+
+    @game.state['companies']['red']['income'] = 12
+    @game.state['companies']['yellow']['income'] = 9
+    @game.state['companies']['green']['income'] = 10
+
+    @game.state['builds'] = 4
+    @game.state['auctions'] = 3
+    @game.state['developments'] = 4
+
+    @game.next_turn!
+
+    assert @game.state['players']['0']['money'] == 4+4+3 , "p0 money is off"
+    assert @game.state['players']['1']['money'] == 4+3+10+9, "p1 money should be 29, but was #{@game.state['players']['1']['money']}"
+
+    assert @game.state['builds'].zero?
+    assert @game.state['auctions'].zero?
+    assert @game.state['developments'].zero?
+
+    assert @game.state['hexes'][Game::DETROIT]['income'] == 2
+  end
+
+  test 'build' do
+    b = Build.new @user1, 'red', @game, ['R3']
+    @game.build(b)
+    @game.reload
+    assert @game.state['builds'] == 1
   end
 end

@@ -13,7 +13,7 @@
 
   <div>
     <%= form.label :company, style: "display: block" %>
-    <%= form.select :company, @game.available_companies.map { |c| [c,c] } %>
+    <%= form.select :company, @game.available_companies_for_auction.map { |c| [c,c] } %>
   </div>
 
   <div>
