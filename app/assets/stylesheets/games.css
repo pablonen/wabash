@@ -3,14 +3,20 @@ svg.board {
 }
 
 .hex-wrap text.cost {
-  font: 4px sans-serif;
+  font: 3px sans-serif;
   fill: red;
   pointer-events: none;
 }
 
 .hex-wrap text.income {
-  font: 4px sans-serif;
+  font: 3px sans-serif;
   fill: green;
+  pointer-events: none;
+}
+
+.hex-wrap text.development {
+  font: 3px sans-serif;
+  fill: aqua;
   pointer-events: none;
 }
 

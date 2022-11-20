@@ -12,6 +12,8 @@ class Game < ApplicationRecord
   COL_ALPHA = ('A'..'S').to_a
 
   DETROIT = 'E0'
+  WHEELING = 'I6'
+  PITTSBURGH = 'K4'
 
   def built?(hex)
     return false unless state.dig("hexes", hex, "built")
@@ -357,6 +359,14 @@ class Game < ApplicationRecord
     state["hexes"].dig(hex,"income") || "as"
   end
 
+  def hex_development(hex)
+    state['hexes'].dig(hex, 'development')
+  end
+
+  def hex_developped(hex)
+    state['hexes'].dig(hex, 'developped')
+  end
+
   def grid_enumerator
     (HEX_W..HEX_W*MAP_COLS).step(HEX_W).each_with_index do |x, i|
       (HEX_H..HEX_H*MAP_ROWS).step(HEX_H).each_with_index do |y, j|
@@ -368,12 +378,14 @@ class Game < ApplicationRecord
         hex_build_cost = build_cost(hex_id)
         hex_type = hex_type(hex_id)
         hex_income = hex_income(hex_id)
+        hex_development = hex_development(hex_id)
+        hex_developped = hex_developped(hex_id)
 
         column_first = j.zero?
         row_first = i.zero?
         draw = true if state['hexes'][coordinate(i,j)]
 
-        yield Hex.new(x,y,i,j,hex_id,hex_type,hex_build_cost, hex_built, column_first, row_first, draw, hex_income)
+        yield Hex.new(x,y,i,j,hex_id,hex_type,hex_build_cost, hex_built, column_first, row_first, draw, hex_income, hex_development, hex_developped )
       end
     end
   end

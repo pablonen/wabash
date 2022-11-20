@@ -25,7 +25,15 @@
           <% end %>
           <text class="cost" x="<%=h.x-5 %>" y="<%=h.y-4%>">-<%= h.build_cost %></text>
           <% unless h.income == "0" %>
-            <text class="income" x="<%=h.x+1%>" y="<%=h.y-4%>"><%= h.income %></text>
+            <text class="income" x="<%= h.x - 1 %>" y="<%=h.y-4%>"><%= h.income %></text>
+          <% end %>
+
+          <% unless h.development == "0" %>
+            <text class="development" x="<%= h.x + 2 %>" y="<%= h.y - 4 %>"><%= h.development %></text>
+          <% end %>
+
+          <% if h.developped %>
+            <rect x="<%= h.x - 1.5 %>" y="<%= h.y + 2 %>" width=3 height=3 fill="azure"></rect>
           <% end %>
         <% end %>
       <% end %>
