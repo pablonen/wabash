@@ -14,6 +14,7 @@ class Build
   attr_reader :errors
 
   def valid?
+    not_ended? &&
     on_turn? &&
     started? &&
     allowed_number_of_tracks? &&
@@ -21,6 +22,11 @@ class Build
     sufficient_money? &&
     player_owns_shares? &&
     connected_to_company_track?
+  end
+
+  def not_ended?
+    @game.errors.add(:base, "The game has ended!") if @game.ended_at
+    !@game.ended_at
   end
 
   def started?

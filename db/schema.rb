@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_17_131202) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_20_135256) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -33,6 +33,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_17_131202) do
     t.datetime "updated_at", null: false
     t.datetime "started", precision: nil
     t.bigint "user_id", null: false
+    t.datetime "ended_at", precision: nil
     t.index ["state"], name: "index_games_on_state", using: :gin
     t.index ["user_id"], name: "index_games_on_user_id"
   end

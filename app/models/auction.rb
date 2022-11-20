@@ -17,6 +17,7 @@ class Auction
   attr_reader :errors
 
   def valid?
+    not_ended? &&
     on_bidding_phase? &&
     on_turn? &&
     valid_bid? &&
@@ -24,15 +25,22 @@ class Auction
   end
 
   def valid_pass?
+    not_ended? &&
     on_bidding_phase? &&
     on_turn?
   end
 
   def valid_start?
+    not_ended? &&
     on_start_auction_phase? &&
     on_turn? &&
     sufficient_money? &&
     shares_left?
+  end
+
+  def not_ended?
+    @game.errors.add(:base, "The game has ended!") if @game.ended_at
+    !@game.ended_at
   end
 
   # cannot start an auction on build/dev/bidding phase

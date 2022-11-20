@@ -33,9 +33,21 @@ class Game < ApplicationRecord
     end
     # remove tracks from company
     state['companies'][build.company]['track'] -= build.hexes.size
-    # TODO, increase the hex cost here? or in build_cost_for ?
+    # TODO, increase the hex cost here? or in build_cost_for?
     # next turn
-    next_turn!
+    if lokomotive_end?
+      end_game!
+    else
+      next_turn!
+    end
+  end
+
+  def develop(development)
+    if development_end?
+      end_game!
+    else
+      next_turn!
+    end
   end
 
   # params need to be in axial since the method is recursive
@@ -185,8 +197,12 @@ class Game < ApplicationRecord
     # change phase to action choosing
     state["phase"] = :choose_action
     save
-    # advance acting player by one
-    next_turn!
+    if share_end?
+      end_game!
+    else
+      # advance acting player by one
+      next_turn!
+    end
   end
 
   def number_of_players
@@ -219,14 +235,41 @@ class Game < ApplicationRecord
     state["developments"] = 0
     # developing detroit
     state['hexes'][DETROIT]['income'] = state['hexes'][DETROIT]['income'].to_i + 1
+    if ending?
+      update_attribute(:ended_at, DateTime.now)
+      finish_game!
+    end
+
     if state['hexes'][DETROIT]['income'].to_i == 8
       end_game!
-    else
-      next_turn!
     end
+    next_turn!
   end
 
-  def end_game!;end
+  def lokomotive_end?
+    state['companies'].map do |_, company_data|
+      company_data['track']
+    end.select(&:zero?).count(true) >= 3
+  end
+
+  def development_end?
+    # 3 or fever developments available
+    false
+  end
+
+  def share_end?
+    state['companies'].map do |_, company_data|
+      company_data['shares'] - company_data['shares_sold']
+    end.select(&:zero?).count(true) >= 3
+  end
+
+  def ending?
+    state.fetch('ending', false)
+  end
+
+  def end_game!
+    state[:ending] = true
+  end
 
   def auction_available?
     state['auctions'] < 3
