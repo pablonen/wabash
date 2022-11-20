@@ -1,0 +1,6 @@
+<h3>Actions</h3>
+<div class="action-container">
+  <% @game.action_availability.each do |action, data| %>
+    <%= render 'action', action: action, data: data %>
+  <% end %>
+</div>

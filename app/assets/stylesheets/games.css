@@ -54,6 +54,40 @@ use.mountain {
   column-gap: 1em;
 }
 
+.action-container {
+  display: flex;
+  column-gap: 1em;
+}
+
+.action {
+  border-radius: 1em;
+  overflow: hidden;
+  line-height: 1.5em;
+}
+
+.action section {
+  background-color: antiquewhite;
+  margin: 0em;
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  font-size: x-large;
+}
+
+.action header {
+  justify-content: center;
+  display: flex;
+  padding: 0em 2em 0em;
+}
+
+.action header.available {
+  background-color: forestgreen;
+}
+
+.action header.unavailable {
+  background-color: brown;
+}
+
 article.company {
   border-radius: 1em;
   overflow: hidden;

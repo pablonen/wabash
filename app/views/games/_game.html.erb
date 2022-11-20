@@ -4,21 +4,8 @@
     <%= game.name %>
   </p>
 
-  <p>
-    <strong>Min players:</strong>
-    <%= game.min_players %>
-  </p>
-
-  <p>
-    <strong>Max players:</strong>
-    <%= game.max_players %>
-  </p>
-
-  <p>
-    <strong>Owner:</strong>
-    <%= game.owner.id %>
-  </p>
   <%= render 'companies' if @game.started? %>
+  <%= render 'actions' if @game.started? %>
 
   <p>
       <strong>Started:</strong>

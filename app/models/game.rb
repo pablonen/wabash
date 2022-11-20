@@ -228,6 +228,24 @@ class Game < ApplicationRecord
 
   def end_game!;end
 
+  def auction_available?
+    state['auctions'] < 3
+  end
+
+  def development_available?
+    state['developments'] < 4
+  end
+
+  def build_available?
+    state['builds'] < 5
+  end
+
+  def action_availability
+    { auction: { max: 3, used: state['auctions'], actions_left: 3 - state['auctions'], available: auction_available? ? "available" : "unavailable" },
+      develop: { max: 4, used: state['developments'], actions_left: 4 - state['developments'], available: development_available? ? "available" : "unavailable" },
+      build: { max: 5, used: state['builds'], actions_left: 5 - state['builds'], available: build_available? ? "available" : "unavailable" }}
+  end
+
   def available_companies_for_building(user)
     # TODO, shouldnt return nils ?
     user.shares(self).uniq.reduce([]) do |available, company|
