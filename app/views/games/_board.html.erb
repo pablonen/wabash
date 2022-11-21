@@ -17,7 +17,13 @@
         <% end %>
 
         <% if h.draw %>
-          <use href="#hex" transform="translate(<%=h.x%>,<%=h.y%>)" class="<%= h.type %>" data-action="click->hex#hex_click" id="<%= h.coordinate %>" />
+          <use href="#hex"
+               transform="translate(<%=h.x%>,<%=h.y%>)"
+               class="<%= h.type %>"
+               data-action="click->hex#select_hex"
+               data-hex-target=<%= h.coordinate %>
+               data-hex-selected-class="selected"
+               id="<%= h.coordinate %>" />
           <% if h.built %>
             <% h.built.each_with_index do |color, i| %>
               <rect x="<%=(h.x-7) + i*4 %>" y="<%=h.y-2%>" width=3 height=3 fill="<%= color %>" />
