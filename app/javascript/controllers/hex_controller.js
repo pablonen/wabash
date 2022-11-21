@@ -7,7 +7,7 @@ export default class extends Controller {
   select_hex(event) {
     let hex_id = event.target.id
     event.target.classList.add(this.selectedClass)
-    this.dispatch("hex_selected", { detail: { hex: hex_id, target: event.target }})
+    this.dispatch("hex_selected", { detail: { hex: hex_id }})
   }
 
   unselect_hex({ detail: { hex }}) {

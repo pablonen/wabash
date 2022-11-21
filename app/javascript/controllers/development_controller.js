@@ -5,7 +5,7 @@ export default class extends Controller {
   static classes = ['selected']
   static values = { previousHex: String }
 
-  process({ detail: { hex, target }}) {
+  process({ detail: { hex }}) {
     // update the input with the newest hex
     let hex_id = hex
 
