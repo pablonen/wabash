@@ -17,6 +17,7 @@ class Build
     not_ended? &&
     on_turn? &&
     started? &&
+    build_available? &&
     allowed_number_of_tracks? &&
     enough_tracks_to_build? &&
     sufficient_money? &&
@@ -32,6 +33,11 @@ class Build
   def started?
     @game.errors.add(:base, "The Game has not started!") unless @game.started?
     @game.started?
+  end
+
+  def build_available?
+    @game.errors.add(:base, "No more build actions available") unless @game.build_available?
+    @game.build_available?
   end
 
   def on_turn?

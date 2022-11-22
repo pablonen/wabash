@@ -4,8 +4,9 @@
 
 <% if @game.started? && current_user.acting?(@game) %>
   <% if @game.phase?(:choose_action) %>
-    <%= link_to 'Build hex', new_build_path(@game) %>
-    <%= link_to 'Auction a share', new_auction_path(@game) %>
+    <%= link_to 'Build hex', new_build_path(@game) if @game.build_available? %>
+    <%= link_to 'Auction a share', new_auction_path(@game) if @game.auction_available?  %>
+    <%= link_to 'Develop hex', new_development_path(@game) if @game.development_available? %>
   <% elsif @game.phase?(:bidding) %>
     <%= link_to 'Bid for share', new_bid_path(@game) %>
   <% end %>

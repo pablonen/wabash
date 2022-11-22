@@ -18,6 +18,9 @@ Rails.application.routes.draw do
   post 'games/:game_id/bid', to: "auctions#bid", as: "bid"
   post 'games/:game_id/pass', to: "auctions#pass", as: "pass"
 
+  get 'games/:game_id/new_development', to: "developments#new_development", as: "new_development"
+  post 'games/:game_id/develop', to: "developments#develop", as: "game_developments"
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   root "games#index"
 end

@@ -33,6 +33,7 @@ class Auction
   def valid_start?
     not_ended? &&
     on_start_auction_phase? &&
+    auction_available? &&
     on_turn? &&
     sufficient_money? &&
     shares_left?
@@ -48,6 +49,11 @@ class Auction
   def on_start_auction_phase?
     @game.errors.add(:base, "Cannot auction/bid on build phase") unless @game.can_auction?
     @game.can_auction?
+  end
+
+  def auction_available?
+    @game.errors.add(:base, "No Auction actions available") unless @game.auction_available?
+    @game.auction_available?
   end
 
   def on_bidding_phase?

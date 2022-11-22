@@ -16,7 +16,7 @@ class Game < ApplicationRecord
   PITTSBURGH = 'K4'
 
   def built?(hex)
-    return false unless state.dig("hexes", hex, "built")
+    return false if state.dig("hexes", hex, "built").try(:empty?)
     state.dig("hexes", hex, "built")
   end
 
@@ -32,6 +32,7 @@ class Game < ApplicationRecord
     build.hexes.each do |hex|
       state['hexes'][hex]['built'] << build.company
       state['companies'][build.company]['built_track'] << hex
+      state['companies'][build.company]['income'] += state['hexes'][hex]['income'].to_i
     end
     # remove tracks from company
     state['companies'][build.company]['track'] -= build.hexes.size
@@ -45,6 +46,27 @@ class Game < ApplicationRecord
   end
 
   def develop(development)
+    state['developments'] += 1
+
+    if development.hex == WHEELING
+      state['hexes'][development.hex]['income'] += 1
+      state['hexes'][development.hex]['built'].each do |company|
+        stat€['companies'][company]['income'] += 1
+
+      end
+    elsif development.hex == PITTSBURGH
+      state['hexes'][development.hex]['income'] += 2
+      state['hexes'][development.hex]['built'].each do |company|
+        state['companies'][company]['income'] += 2
+      end
+    else
+      state['hexes'][development.hex]['developped'] = true
+      state['hexes'][development.hex]['income'] += state['hexes'][development.hex]['development'].to_i
+      state['hexes'][development.hex]['built'].each do |company|
+        state['companies'][company]['income'] += state['hexes'][development.hex]['development'].to_i
+      end
+    end
+
     if development_end?
       end_game!
     else
@@ -52,9 +74,20 @@ class Game < ApplicationRecord
     end
   end
 
+  def hex_developpable?(hex)
+    return false if state['hexes'][hex]['type'] == 'field'
+    return false if state['hexes'][hex]['type'] == 'forest'
+    return false if state['hexes'][hex]['development'] == '0'
+    return false if state['hexes'][hex]['developped']
+    return false if hex == DETROIT
+    return false if hex == WHEELING && state['hexes'][WHEELING]['income'] == 6
+    return false if hex == PITTSBURGH && state['hexes'][PITTSBURGH]['income'] == 8
+    true
+  end
+
   # params need to be in axial since the method is recursive
   def builds_adjacent_to_track?(hexes_to_be_built, company_built_hexes)
-    return true if hexes_to_be_built.empty?
+   return true if hexes_to_be_built.empty?
 
     built_tracks_neighbours = company_built_hexes.flat_map do |hex|
       HexPathfinding.neighbours(hex)
@@ -89,9 +122,9 @@ class Game < ApplicationRecord
   end
 
   def round_end?
-    build_used = state['builds'] == 5
-    developments_used = state['developments'] == 4
-    auctions_used = state['auctions'] == 3
+    build_used = state['builds'] >= 5
+    developments_used = state['developments'] >= 4
+    auctions_used = state['auctions'] >= 3
 
     [build_used, developments_used, auctions_used].count(true) == 2
   end
@@ -221,8 +254,9 @@ class Game < ApplicationRecord
   end
 
   def company_income_per_share(company)
-    no_sold_shares = state['companies'][company].fetch('sold_shares', 1)
+    no_sold_shares = state['companies'][company].fetch('shares_sold', 1)
     company_income = state['companies'][company]['income'].to_i
+    return company_income if no_sold_shares.zero?
     (company_income / no_sold_shares.to_f).ceil
   end
 

@@ -7,12 +7,13 @@ class Development
     @hex = hex
   end
 
-  attr_accessor :game, :hexes, :actor, :company, :cost
+  attr_accessor :game, :hex, :actor, :company, :cost
   attr_reader :errors
 
   def valid?
     not_ended? &&
     on_turn? &&
+    development_available? &&
     started? &&
     valid_development? &&
     track_built?
@@ -33,14 +34,19 @@ class Development
     @game.user_acting?(@actor)
   end
 
+  def development_available?
+    @game.errors.add(:base, "No development actions available") unless @game.development_available?
+    @game.development_available?
+  end
+
   def valid_development?
     @game.errors.add(:base, "Hex #{@hex} is not developpable") unless @game.hex_developpable?(@hex)
-    @game.hex_developpable?
+    @game.hex_developpable? @hex
   end
 
   def track_built?
     @game.errors.add(:base, "Hex #{@hex} needs to have company track built to be developpable") unless @game.built? @hex
-    @game.built @hex
+    @game.built? @hex
   end
 
   # Implementation boilerplate see https://api.rubyonrails.org/v7.0.4/classes/ActiveModel/Errors.html 

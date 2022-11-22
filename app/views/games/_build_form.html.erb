@@ -15,7 +15,10 @@
     <%= form.label :company %>
     <%= form.select :company, @game.available_companies_for_building(current_user).map { |c| [c,c] } %>
   </div>
-  <div data-controller="hex builds" data-builds-selected-class="selected" data-action="hex:hex_click->builds#process">
+  <div data-controller="hex builds"
+       data-hex-selected-class="selected"
+       data-action="hex:hex_selected->builds#process
+                    builds:unselect->hex#unselect_hex">
     <%= render 'games/board' %>
     <div>
       <%= form.text_field "hex[]", {data: { 'builds-target'=> 'input'}} %>

@@ -9,10 +9,7 @@ class BuildsController < ApplicationController
 
   # POST /games/1/builds
   def build
-    # validate user turn
     b = Build.new current_user, params[:company], @game, params[:hex]
-    # validate legit turn
-    # persist turn to state
     respond_to do |format|
       if b.valid?
         @game.build(b)

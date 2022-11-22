@@ -122,10 +122,10 @@ class GameTest < ActiveSupport::TestCase
     @game.state['players']['0']['shares'] = ['red', 'blue', 'red']
     @game.state['players']['1']['shares'] = ['yellow','green','blue', 'red']
 
-    @game.state['companies']['red']['sold_shares'] = 3
-    @game.state['companies']['blue']['sold_shares'] = 2
-    @game.state['companies']['yellow']['sold_shares'] = 1
-    @game.state['companies']['green']['sold_shares'] = 1
+    @game.state['companies']['red']['shares_sold'] = 3
+    @game.state['companies']['blue']['shares_sold'] = 2
+    @game.state['companies']['yellow']['shares_sold'] = 1
+    @game.state['companies']['green']['shares_sold'] = 1
 
     @game.state['companies']['red']['income'] = 12
     @game.state['companies']['yellow']['income'] = 9
@@ -136,6 +136,10 @@ class GameTest < ActiveSupport::TestCase
     @game.state['developments'] = 4
 
     @game.next_turn!
+
+    red_income = @game.company_income_per_share('red')
+    assert red_income == 4, "red income was #{red_income}, should be 4"
+    assert @game.company_income_per_share('blue') == 3
 
     assert @game.state['players']['0']['money'] == 4+4+3 , "p0 money is off"
     assert @game.state['players']['1']['money'] == 4+3+10+9, "p1 money should be 29, but was #{@game.state['players']['1']['money']}"
