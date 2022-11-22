@@ -24,6 +24,11 @@ class Game < ApplicationRecord
     user
   end
 
+  def pass_action(action)
+    state[ActiveSupport::Inflector.pluralize(action.action)] += 1
+    next_turn!
+  end
+
   def build(build)
     state['builds'] += 1
     # remove company money for cost
@@ -317,6 +322,11 @@ class Game < ApplicationRecord
 
   def build_available?
     state['builds'] < 5
+  end
+
+  def action_available?(action)
+    availability_method = action + '_available?'
+    send(availability_method.to_sym)
   end
 
   def action_availability

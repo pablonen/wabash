@@ -1,3 +1,4 @@
+<%= link_to 'Back to game', game_path(@game) %>
 <%= form_with url: start_auction_path do |form| %>
   <% if @game.errors.any? %>
     <div style="color: red">
@@ -24,5 +25,13 @@
   <div>
     <%= form.submit 'Start auction' %>
   </div>
+<% end %>
 
+<%= form_with url: pass_action_path do |form| %>
+  <div>
+    <%= form.hidden_field :action_type, value: 'auctions' %>
+  </div>
+  <div>
+    <%= form.submit 'Pass auction' %>
+  </div>
 <% end %>

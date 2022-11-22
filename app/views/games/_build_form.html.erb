@@ -31,3 +31,13 @@
     </div>
   </div>
 <% end %>
+
+<%= form_with url: pass_action_path do |form| %>
+  <div>
+    <%= form.hidden_field :action_type, value: 'builds' %>
+  </div>
+
+  </div>
+    <%= form.submit 'Pass build' %>
+  </div>
+<% end %>

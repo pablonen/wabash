@@ -4,8 +4,8 @@
     <%= game.name %>
   </p>
 
-  <%= render 'companies' if @game.started? %>
-  <%= render 'actions' if @game.started? %>
+  <%= render 'games/companies' if @game.started? %>
+  <%= render 'games/actions' if @game.started? %>
 
   <p>
       <strong>Started:</strong>
@@ -37,7 +37,7 @@
 
   <p>
     <strong>Board:</strong>
-    <%= render 'board' %>
+    <%= render 'games/board' %>
   </p>
 
   <p>

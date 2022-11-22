@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   get 'games/:game_id/new_development', to: "developments#new_development", as: "new_development"
   post 'games/:game_id/develop', to: "developments#develop", as: "game_developments"
 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  post 'games/:game_id/pass_action', to: 'passes#pass_action', as: "pass_action"
+
   root "games#index"
 end
