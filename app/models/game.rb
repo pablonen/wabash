@@ -411,6 +411,13 @@ class Game < ApplicationRecord
     state['hexes'].dig(hex, 'developped')
   end
 
+  def players_enumerator
+    state['players'].each do |seat, player_data|
+      player = player_on_seat(seat.to_i)
+      yield ({ name: player.id, money: player_data['money'], shares: player_data['shares'].tally })
+    end
+  end
+
   def grid_enumerator
     (HEX_W..HEX_W*MAP_COLS).step(HEX_W).each_with_index do |x, i|
       (HEX_H..HEX_H*MAP_ROWS).step(HEX_H).each_with_index do |y, j|

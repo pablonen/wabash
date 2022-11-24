@@ -1,0 +1,28 @@
+<article class="player">
+  <header><%= player[:name] %></header>
+  <section class="player-sheet">
+    <div class="player-money">
+      <%= player[:money] %>
+    </div>
+
+    <div class="player-shares">
+      <table>
+        <caption>Shares</caption>
+        <thead>
+          <tr>
+            <% player[:shares].each do |company, _| %>
+              <td><%= company.capitalize %></td>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <% player[:shares].each do |_, number| %>
+              <td><%= number %></td>
+            <% end %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</article>
