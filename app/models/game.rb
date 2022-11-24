@@ -414,7 +414,7 @@ class Game < ApplicationRecord
   def players_enumerator
     state['players'].each do |seat, player_data|
       player = player_on_seat(seat.to_i)
-      yield ({ name: player.id, money: player_data['money'], shares: player_data['shares'].tally })
+      yield ({ name: player.handle, money: player_data['money'], shares: player_data['shares'].tally })
     end
   end
 
