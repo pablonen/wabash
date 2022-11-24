@@ -1,5 +1,5 @@
 <article class="player">
-  <header><%= player[:name] %></header>
+  <%= content_tag :header, player[:name], class: [{ active: player[:acting] }] %>
   <section class="player-sheet">
     <div class="player-money">
       <%= player[:money] %>

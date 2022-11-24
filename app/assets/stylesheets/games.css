@@ -78,6 +78,14 @@ use.mountain {
   background-color: dimgrey;
 }
 
+.player header.active {
+  background-color: forestgreen;
+}
+
+.player header.passed::after {
+  content: "*PASSED*";
+}
+
 .player-money {
   font-size: x-large;
   display: flex;
