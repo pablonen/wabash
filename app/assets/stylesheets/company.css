@@ -1,0 +1,47 @@
+.company-container {
+  display: flex;
+  column-gap: 1em;
+}
+
+article.company {
+  border-radius: 1em;
+  overflow: hidden;
+  line-height: 1.5em;
+}
+
+.company header {
+  justify-content: center;
+  display: flex;
+}
+
+.company .sheet {
+  background-color: antiquewhite;
+  margin: 0em;
+  padding: 1em;
+}
+
+.sheet dt::after {
+  content: ": ";
+}
+
+.sheet dd.money::after {
+  content: " $"
+}
+
+.sheet dd {
+  margin-left: 1em;
+}
+
+.company.red header {
+  background-color: brown;
+}
+
+.company.blue header {
+  background-color: dodgerblue;
+}
+.company.green header {
+  background-color: darkolivegreen;
+}
+.company.yellow header {
+  background-color: goldenrod;
+}

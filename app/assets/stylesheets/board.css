@@ -1,0 +1,56 @@
+svg.board {
+  flex: 1;
+}
+
+.hex-wrap text.cost {
+  font: 3px sans-serif;
+  fill: red;
+  pointer-events: none;
+}
+
+.hex-wrap text.income {
+  font: 3px sans-serif;
+  fill: green;
+  pointer-events: none;
+}
+
+.hex-wrap text.development {
+  font: 3px sans-serif;
+  fill: aqua;
+  pointer-events: none;
+}
+
+.hex-wrap text.coord {
+  font: 4px sans-serif;
+}
+
+use.undefined {
+  fill: #000080;
+}
+
+use.field {
+  fill: #ffd700;
+}
+
+use.forest {
+  fill: #228b22;
+}
+
+use.town {
+  fill: #fafdd2;
+}
+
+use.city {
+  fill: #a9a9a9;
+  stroke: red;
+  stroke-width: 1;
+}
+
+use.mountain {
+  fill: #a9a9a9;
+}
+
+.selected {
+  stroke: purple;
+  stroke-width: 1;
+}

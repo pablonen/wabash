@@ -1,4 +1,5 @@
-<div id="<%= dom_id game %>">
+<div id="<%= dom_id game %>" class="game">
+  <div class="state-container">
   <p>
     <strong>Name:</strong>
     <%= game.name %>
@@ -37,14 +38,17 @@
   </p>
 
   <p>
-    <strong>Board:</strong>
-    <%= render 'games/board' %>
-  </p>
-
-  <p>
     <strong>State:</strong>
     <pre>
       <%= JSON.pretty_generate(game.state.except('hexes')) %>
     </pre>
   </p>
+  </div>
+  <div class="board-container">
+    <p>
+      <strong>Board:</strong>
+      <%= render 'games/board' %>
+    </p>
+
+  </div>
 </div>

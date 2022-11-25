@@ -1,0 +1,50 @@
+.player-container {
+  display: flex;
+  column-gap: 1em;
+}
+
+.player {
+  border-radius: 1em;
+  overflow: hidden;
+  line-height: 1.5em;
+}
+
+.player section {
+  background-color: antiquewhite;
+  margin: 0em;
+  padding: 1em;
+}
+
+.player header {
+  text-align: center;
+  padding: 0em 2em 0em;
+  background-color: dimgrey;
+}
+
+.player header.active {
+  background-color: forestgreen;
+}
+
+.player header.passed::after {
+  content: "*PASSED*";
+}
+
+.player-money {
+  font-size: x-large;
+  display: flex;
+  justify-content: center;
+}
+
+.player-money::after {
+  content: "$";
+}
+
+.player-shares table {
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.player-shares tbody td {
+  text-align: center;
+  padding-left: 1em;
+}
