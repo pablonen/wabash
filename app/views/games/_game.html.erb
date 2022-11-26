@@ -5,6 +5,7 @@
     <%= game.name %>
   </p>
 
+  <%= render 'games/auction' if @game.phase?(:bidding) %>
   <%= render 'games/companies' if @game.started? %>
   <%= render 'games/actions' if @game.started? %>
   <%= render 'games/players' if @game.started? %>

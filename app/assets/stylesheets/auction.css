@@ -1,0 +1,59 @@
+.auction-container {
+  display: flex;
+  column-gap: 1em;
+}
+
+.auction {
+  border-radius: 1em;
+  overflow: hidden;
+  line-height: 1.5;
+  background-color: antiquewhite;
+}
+
+.auction h4 {
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+
+.auction header {
+  text-align: center;
+}
+
+.auction header.red {
+  background-color: brown;
+}
+
+.auction header.blue {
+  background-color: dodgerblue;
+}
+
+.auction header.yellow {
+  background-color: goldenrod;
+}
+
+.auction header.green {
+  background-color: darkolivegreen;
+}
+
+.auction section.high-bid {
+  text-align: center;
+  font-size: x-large;
+  margin: 0em;
+  padding 1em;
+}
+
+.auction section.high-bidder {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.auction section.high-bid::after {
+  content: " $";
+}
+
+.auction section.passers {
+}
+
+.auction section:last-child {
+  padding-bottom: 1em;
+}

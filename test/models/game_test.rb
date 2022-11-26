@@ -33,6 +33,8 @@ class GameTest < ActiveSupport::TestCase
 
     @game2.pass_auction!(@user3, red_pass)
     assert @game2.state['players']['0']['shares'].include? 'red'
+    assert @game2.state['companies']['red']['money'] == 20
+    assert @game2.state['companies']['red']['shares_sold'] == 1
     assert @game2.user_acting?(@user1), "User1 should be acting after winning the red share"
 
     # Blue auction
@@ -47,6 +49,7 @@ class GameTest < ActiveSupport::TestCase
 
     @game2.pass_auction!(@user3, blue_pass)
     assert @game2.state['players']['0']['shares'].include? 'blue'
+    assert @game2.state['companies']['blue']['shares_sold'] == 1
     assert @game2.user_acting?(@user1), "User1 should be acting after winning the blue share"
 
     # Yellow auction
@@ -62,6 +65,7 @@ class GameTest < ActiveSupport::TestCase
     yellow_pass = Auction.new(@user3, @game2, 'yellow', 0, pass: true)
     @game2.pass_auction!(@user3, yellow_pass)
     assert @game2.state['players']['1']['shares'].include? 'yellow'
+    assert @game2.state['companies']['yellow']['shares_sold'] == 1
     assert @game2.user_acting?(@user2), "User2 should be acting after winning the yellow share"
 
     # Green auction
@@ -75,6 +79,7 @@ class GameTest < ActiveSupport::TestCase
     assert @game2.user_acting? @user1
     @game2.pass_auction!(@user1, green_pass )
     assert @game2.state['players']['1']['shares'].include? 'green'
+    assert @game2.state['companies']['green']['shares_sold'] == 1
 
     # Aftermath
 

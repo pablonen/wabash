@@ -297,8 +297,8 @@ class Game < ApplicationRecord
   end
 
   def company_income_per_share(company)
-    no_sold_shares = state['companies'][company].fetch('shares_sold', 1)
-    company_income = state['companies'][company]['income'].to_i
+    no_sold_shares = state['companies'][company]['shares_sold']
+    company_income = state['companies'][company]['income']
     return company_income if no_sold_shares.zero?
     (company_income / no_sold_shares.to_f).ceil
   end
@@ -423,6 +423,10 @@ class Game < ApplicationRecord
 
   def bidding_seat
     return state["bidding_seat"]
+  end
+
+  def high_bidder_name
+    player_on_seat(state['high_bidder']).handle
   end
 
   def companies
