@@ -14,6 +14,8 @@ class Game < ApplicationRecord
   DETROIT = 'E0'
   WHEELING = 'I6'
   PITTSBURGH = 'K4'
+  CHICAGO = 'A2'
+  FORT_WAYNE = 'D3'
 
   def built?(hex)
     return false if state.dig("hexes", hex, "built").try(:empty?)
@@ -42,6 +44,21 @@ class Game < ApplicationRecord
     # remove tracks from company
     state['companies'][build.company]['track'] -= build.hexes.size
     # TODO, increase the hex cost here? or in build_cost_for?
+
+    # If chicago was built for the first time, trigger the chicago dividend
+    # and start the black company
+    if build.hexes.include?(CHICAGO)
+      if !state['companies'][build.company]['chicago_dividends_paid']
+        chicago_dividend!(build.company)
+        state['companies'][build.company]['chicago_dividends_paid'] = true
+      end
+
+      if !state['companies']['black']['started']
+        start_wabash! build.actor
+        return
+      end
+    end
+
     # next turn
     if lokomotive_end?
       end_game!
@@ -56,7 +73,7 @@ class Game < ApplicationRecord
     if development.hex == WHEELING
       state['hexes'][development.hex]['income'] += 1
       state['hexes'][development.hex]['built'].each do |company|
-        stat€['companies'][company]['income'] += 1
+        state['companies'][company]['income'] += 1
 
       end
     elsif development.hex == PITTSBURGH
@@ -165,12 +182,12 @@ class Game < ApplicationRecord
   end
 
   def initial_auction!(company, active_seat)
-    state[:phase] = :bidding
-    state[:auction] = company
-    state[:high_bid] = 0
-    state[:high_bidder] = 0
-    state[:bidding_seat] = active_seat
-    state[:passers] = []
+    state['phase'] = 'bidding'
+    state['auction'] = company
+    state['high_bid'] = 0
+    state['high_bidder'] = 0
+    state['bidding_seat'] = active_seat
+    state['passers'] = []
     save
   end
 
@@ -323,6 +340,25 @@ class Game < ApplicationRecord
       end_game!
     end
     next_turn!
+  end
+
+  def chicago_dividend!(company)
+    per_company_share = company_income_per_share(company)
+    state['players'].each do |seat, player|
+      no_company_shares = player['shares'].count { |share| share == company }
+      player['money'] += per_company_share * no_company_shares
+    end
+  end
+
+  def start_wabash!( wabash_builder )
+    state['companies']['black']['started'] = true
+    state['hexes'][FORT_WAYNE]['built'] << 'black'
+    state['companies']['black']['income'] = state['hexes'][FORT_WAYNE]['income']
+    state['companies']['black']['built_track'] << FORT_WAYNE
+
+    # start the auction
+    builder_seat = wabash_builder.seat_in(self)
+    initial_auction!('black', builder_seat)
   end
 
   def lokomotive_end?

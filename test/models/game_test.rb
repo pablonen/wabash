@@ -231,4 +231,36 @@ class GameTest < ActiveSupport::TestCase
     @game.reload
     assert @game.state['builds'] == 1
   end
+
+  test 'build chicago' do
+    @game.state['players']['0']['money'] = 0
+    @game.state['players']['1']['money'] = 0
+
+    @game.state['players']['0']['shares'] = ['red', 'blue', 'red']
+    @game.state['players']['1']['shares'] = ['yellow','green','blue', 'red']
+
+    @game.state['companies']['red']['shares_sold'] = 3
+    @game.state['companies']['blue']['shares_sold'] = 2
+    @game.state['companies']['yellow']['shares_sold'] = 1
+    @game.state['companies']['green']['shares_sold'] = 1
+
+    @game.state['companies']['red']['income'] = 12
+    @game.state['companies']['yellow']['income'] = 9
+    @game.state['companies']['green']['income'] = 10
+
+    b = Build.new @user1, 'red', @game, [Game::CHICAGO]
+
+    @game.build(b)
+
+    assert @game.state['players']['0']['money'] == 14, "player1 should have 14 money, but had #{@game.state['players']['0']['money']}"
+    assert @game.state['players']['1']['money'] == 7, "player 2 should have 7 money, but had #{@game.state['players']['1']['money']}"
+
+    assert @game.state['companies']['red']['income'] == 12 + 7
+    assert @game.state['companies']['black']['started']
+    assert @game.state['companies']['black']['income'] == 1
+
+    assert @game.state['phase'] == "bidding", "auction for black company should be on, but phase is #{@game.state['phase']}"
+    assert @game.state['auction'] == 'black'
+    assert @game.user_acting?(@user1), "after building chicago, the builder that is user1 should be in charge of leading into the auction for the black company share"
+  end
 end
