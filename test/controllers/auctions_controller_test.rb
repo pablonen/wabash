@@ -9,6 +9,7 @@ class AuctionsControllerTest < ActionDispatch::IntegrationTest
     @user2 = users(:two)
     sign_in @user1
     @game.start!
+    @game.skip_initial_auction!
   end
 
   test "should start auction" do

@@ -67,8 +67,8 @@ class Auction
   end
 
   def sufficient_money?
-    @game.errors.add(:base, "Not enough money for bid") if @game.player_money(@actor) < @bid
-    @game.player_money(@actor) > @bid
+    @game.errors.add(:base, "Not enough money for bid") if @game.player_money(@actor) <= @bid
+    @game.player_money(@actor) >= @bid
   end
 
   # TODO, implement minimum bid rules

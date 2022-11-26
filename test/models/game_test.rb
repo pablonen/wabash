@@ -8,8 +8,77 @@ class GameTest < ActiveSupport::TestCase
     @user2 = users(:two)
     @user3 = users(:three)
     @game.start!
+    @game.skip_initial_auction!
     @game2.start!
     @auction = Auction.new(@user1, @game, 'red', 3)
+  end
+
+  test 'initial_auction!' do
+    assert @game2.user_acting? @user1
+    assert @game2.phase?(:bidding)
+    assert @game2.state['auction'] == 'red', "expected a red auction to be on the way, but was #{@game2.state['auction']}"
+    assert @user1.seat_in(@game2) == 0
+    assert @user2.seat_in(@game2) == 1
+    assert @user3.seat_in(@game2) == 2
+
+    # Red auction
+
+    red_bid = Auction.new(@user1, @game2, 'red', 20)
+    @game2.bid_auction!(@user1, red_bid)
+    assert @game2.user_acting? @user2
+
+    red_pass = Auction.new(@user2, @game2, 'red', 0, pass: true)
+    @game2.pass_auction!(@user2, red_pass)
+    assert @game2.user_acting? @user3
+
+    @game2.pass_auction!(@user3, red_pass)
+    assert @game2.state['players']['0']['shares'].include? 'red'
+    assert @game2.user_acting?(@user1), "User1 should be acting after winning the red share"
+
+    # Blue auction
+
+    blue_bid = Auction.new(@user1, @game2, 'blue', 20)
+    @game2.bid_auction!(@user1, blue_bid)
+    assert @game2.user_acting? @user2
+
+    blue_pass = Auction.new(@user2, @game2, 'blue', 0, pass: true)
+    @game2.pass_auction!(@user2, blue_pass)
+    assert @game2.user_acting? @user3
+
+    @game2.pass_auction!(@user3, blue_pass)
+    assert @game2.state['players']['0']['shares'].include? 'blue'
+    assert @game2.user_acting?(@user1), "User1 should be acting after winning the blue share"
+
+    # Yellow auction
+
+    yellow_bid1 = Auction.new(@user1, @game2, 'yellow', 0, pass: true)
+    @game2.pass_auction!(@user1, yellow_bid1)
+    assert @game2.user_acting? @user2
+
+    yellow_bid2 = Auction.new(@user2, @game2, 'yellow', 20)
+    @game2.bid_auction!(@user2, yellow_bid2)
+    assert @game2.user_acting?(@user3)
+
+    yellow_pass = Auction.new(@user3, @game2, 'yellow', 0, pass: true)
+    @game2.pass_auction!(@user3, yellow_pass)
+    assert @game2.state['players']['1']['shares'].include? 'yellow'
+    assert @game2.user_acting?(@user2), "User2 should be acting after winning the yellow share"
+
+    # Green auction
+
+    green_bid = Auction.new(@user2, @game2, 'green', 20)
+    @game2.bid_auction!(@user2, green_bid)
+    assert @game2.user_acting? @user3
+
+    green_pass = Auction.new(@user3, @game2, 'green', 0, pass: true)
+    @game2.pass_auction!(@user3, green_pass)
+    assert @game2.user_acting? @user1
+    @game2.pass_auction!(@user1, green_pass )
+    assert @game2.state['players']['1']['shares'].include? 'green'
+
+    # Aftermath
+
+    assert @game2.user_acting?(@user1), "User1 should be acting first after winning the red share"
   end
 
   test 'start_auction!' do

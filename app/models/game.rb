@@ -139,7 +139,7 @@ class Game < ApplicationRecord
   end
 
   def start!
-    state[:phase] = :choose_action
+    state[:phase] = :bidding
     state[:acting_seat] = 0
     state[:builds] = 0
     state[:auctions] = 0
@@ -154,6 +154,24 @@ class Game < ApplicationRecord
     # updates other dirty attributes on the object, in this case money of
     # the players in state
     update_attribute(:started, DateTime.now)
+    initial_auction!('red', 0)
+    save
+  end
+
+  def skip_initial_auction!
+    state['phase'] = :choose_action
+    state['initial_auction_done'] = true
+    save
+  end
+
+  def initial_auction!(company, active_seat)
+    state[:phase] = :bidding
+    state[:auction] = company
+    state[:high_bid] = 0
+    state[:high_bidder] = 0
+    state[:bidding_seat] = active_seat
+    state[:passers] = []
+    save
   end
 
   def phase
@@ -211,6 +229,8 @@ class Game < ApplicationRecord
     end
   end
 
+  # TODO, maybe refactor the auction to not hold the acting user to make the
+  # interface smaller
   def bid_auction!(bidder, auction)
     # record higher bid
     state['high_bid'] = auction.bid
@@ -234,13 +254,31 @@ class Game < ApplicationRecord
     # add money to the company
     state['companies'][state['auction']]['money'] += state['high_bid'].to_i
 
-    # change phase to action choosing
-    state["phase"] = :choose_action
     save
     if share_end?
       end_game!
+    elsif !state['initial_auction_done']
+      if auction.company == 'red'
+        state['first_player_seat'] = state['high_bidder']
+        next_company = 'blue'
+      elsif auction.company == 'blue'
+        next_company = 'yellow'
+      elsif auction.company == 'yellow'
+        next_company = 'green'
+      else
+        next_company = nil
+        state['initial_auction_done'] = true
+        state['phase'] = :choose_action
+        # start with the red owner
+        state['acting_seat'] = state['first_player_seat']
+        save
+        return
+      end
+      winner_seat = state['high_bidder']
+      initial_auction! next_company, winner_seat
     else
       # advance acting player by one
+      state["phase"] = :choose_action
       next_turn!
     end
   end
