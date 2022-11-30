@@ -7,7 +7,7 @@
       </g>
     </defs>
     <g class="hex-wrap">
-      <% @game.grid_enumerator do |h| %>
+      <% game.grid_enumerator do |h| %>
 
         <% if h.column_first %>
           <text class="coord" x="<%= h.x - 2 %>" y="<%= h.y - Game::HEX_H + 4 %>" ><%= Game::COL_ALPHA[h.i] %></text>

@@ -11,6 +11,7 @@ class DevelopmentsController < ApplicationController
     respond_to do |format|
       if d.valid?
         @game.develop(d)
+        @game.broadcast_updates
         format.html { redirect_to game_url(@game), notice: "developped!"}
       else
         format.html { render 'new_development', status: :unprocessable_entity }

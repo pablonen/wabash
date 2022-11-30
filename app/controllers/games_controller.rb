@@ -26,6 +26,7 @@ class GamesController < ApplicationController
       # TODO, extract_method
       if current_user == @game.owner
         @game.start!
+        @game.broadcast_updates
         format.html { redirect_to game_url(@game), notice: 'Game started!' }
       else
         format.html { redirect_to game_url(@game), notice: 'You must be the game ownre to start a game' }
@@ -39,6 +40,7 @@ class GamesController < ApplicationController
     respond_to do |format|
       unless @user.in_game?(@game)
         @user.join_in(@game)
+        @game.broadcast_updates
         format.html { redirect_to game_url(@game), notice: "you joined the game!" }
       else
         format.html { redirect_to game_url(@game), notice: "already joined in game!" }
@@ -55,6 +57,7 @@ class GamesController < ApplicationController
     respond_to do |format|
       unless @game.started?
         GamePlayer.find_by(game_id: @game.id, user_id: current_user.id ).destroy
+        @game.broadcast_updates
         format.html { redirect_to game_url(@game), notice: "Left game" }
       else
         format.html { redirect_to game_url(@game), notice: "Game started, cannot leave the game!" }
@@ -81,6 +84,7 @@ class GamesController < ApplicationController
   def update
     respond_to do |format|
       if @game.update(game_params)
+        @game.broadcast_updates
         format.html { redirect_to game_url(@game), notice: "Game was successfully updated." }
         format.json { render :show, status: :ok, location: @game }
       else

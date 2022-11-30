@@ -1,11 +1,11 @@
-<%= link_to 'Back to game', game_path(@game) %>
+<%= link_to 'Back to game', game_path(game) %>
 <%= form_with url: game_builds_path do |form| %>
-  <% if @game.errors.any? %>
+  <% if game.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(@game.errors.count, "error") %> prohibited this game from being saved:</h2>
+      <h2><%= pluralize(game.errors.count, "error") %> prohibited this game from being saved:</h2>
 
       <ul>
-        <% @game.errors.each do |error| %>
+        <% game.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
@@ -13,13 +13,13 @@
   <% end %>
   <div>
     <%= form.label :company %>
-    <%= form.select :company, @game.available_companies_for_building(current_user).map { |c| [c,c] } %>
+    <%= form.select :company, game.available_companies_for_building(current_user).map { |c| [c,c] } %>
   </div>
   <div data-controller="hex builds"
        data-hex-selected-class="selected"
        data-action="hex:hex_selected->builds#process
                     builds:unselect->hex#unselect_hex">
-    <%= render 'games/board' %>
+    <%= render 'games/board', game: game %>
     <div>
       <%= form.text_field "hex[]", {data: { 'builds-target'=> 'input'}} %>
       <%= form.text_field "hex[]", {data: { 'builds-target'=> 'input'}} %>

@@ -1,11 +1,11 @@
-<%= link_to 'Back to game', game_path(@game) %>
-<%= form_with url: game_developments_path(@game) do |form| %>
-  <% if @game.errors.any? %>
+<%= link_to 'Back to game', game_path(game) %>
+<%= form_with url: game_developments_path(game) do |form| %>
+  <% if game.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(@game.errors.count, "error") %> prohibited this game from being saved:</h2>
+      <h2><%= pluralize(game.errors.count, "error") %> prohibited this game from being saved:</h2>
 
       <ul>
-        <% @game.errors.each do |error| %>
+        <% game.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
@@ -19,7 +19,7 @@
        data-action="hex:hex_selected->development#process
                     development:change_selection->hex#change_hex_selection
                     development:toggle_hex->hex#toggle_hex">
-    <%= render 'games/board' %>
+    <%= render 'games/board', game: game %>
     <div>
       <%= form.text_field "hex", {data: { 'development-target' => 'input' }} %>
     </div>

@@ -13,7 +13,9 @@
 <% else %>
   <%= link_to 'Start game', start_game_path(@game), data: {turbo_method: :post } if @game.owner == current_user and not @game.started? %>
 <% end %>
-<%= render @game %>
+
+<%= turbo_stream_from @game %>
+<%= render @game, game: @game %>
 
 <div>
   <%= link_to "Edit this game", edit_game_path(@game) %> |

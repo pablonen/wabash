@@ -13,6 +13,7 @@ class BuildsController < ApplicationController
     respond_to do |format|
       if b.valid?
         @game.build(b)
+        @game.broadcast_updates
         format.html { redirect_to game_url(@game), notice: "built!"}
       else
         format.html { render 'games/new_build', status: :unprocessable_entity }

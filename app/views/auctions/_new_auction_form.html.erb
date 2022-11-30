@@ -1,11 +1,11 @@
-<%= link_to 'Back to game', game_path(@game) %>
+<%= link_to 'Back to game', game_path(game) %>
 <%= form_with url: start_auction_path do |form| %>
-  <% if @game.errors.any? %>
+  <% if game.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(@game.errors.count, "error") %> prohibited this game from being saved:</h2>
+      <h2><%= pluralize(game.errors.count, "error") %> prohibited this game from being saved:</h2>
 
       <ul>
-        <% @game.errors.each do |error| %>
+        <% game.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
@@ -14,7 +14,7 @@
 
   <div>
     <%= form.label :company, style: "display: block" %>
-    <%= form.select :company, @game.available_companies_for_auction.map { |c| [c,c] } %>
+    <%= form.select :company, game.available_companies_for_auction.map { |c| [c,c] } %>
   </div>
 
   <div>

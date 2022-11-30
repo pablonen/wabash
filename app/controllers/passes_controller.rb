@@ -7,6 +7,7 @@ class PassesController < ApplicationController
     respond_to do |format|
       if pa.valid?
         @game.pass_action(pa)
+        @game.broadcast_updates
         format.html { redirect_to game_url(@game), notice: "passed" }
       else
         format.html { render 'games/show', status: :unprocessable_entity, notice: "error in passing" }

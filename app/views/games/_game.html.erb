@@ -1,14 +1,14 @@
-<div id="<%= dom_id game %>" class="game">
+<div id="<%= dom_id(game) %>" class="game">
   <div class="state-container">
   <p>
     <strong>Name:</strong>
     <%= game.name %>
   </p>
 
-  <%= render 'games/auction' if @game.phase?(:bidding) %>
-  <%= render 'games/companies' if @game.started? %>
-  <%= render 'games/actions' if @game.started? %>
-  <%= render 'games/players' if @game.started? %>
+  <%= render 'games/auction', game: game if game.phase?(:bidding) and game.state['auction'] %>
+  <%= render 'games/companies', game: game if game.started? %>
+  <%= render 'games/actions', game: game if game.started? %>
+  <%= render 'games/players', game: game if game.started? %>
 
   <p>
       <strong>Started:</strong>
@@ -27,15 +27,15 @@
     </ol>
   </p>
 
-  <% if @game.started? %>
+  <% if game.started? %>
     <p>
       <strong>Acting:</strong>
-      <%= @game.acting_player.id %>
+      <%= game.acting_player.id %>
     </p>
   <% end %>
   <p>
     <strong>Phase:</strong>
-    <%= @game.phase %>
+    <%= game.phase %>
   </p>
 
   <p>
@@ -48,7 +48,7 @@
   <div class="board-container">
     <p>
       <strong>Board:</strong>
-      <%= render 'games/board' %>
+      <%= render 'games/board', game: game %>
     </p>
 
   </div>

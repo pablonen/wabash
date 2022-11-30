@@ -17,6 +17,10 @@ class Game < ApplicationRecord
   CHICAGO = 'A2'
   FORT_WAYNE = 'D3'
 
+  def broadcast_updates
+    broadcast_replace_to self, partial: "games/game"
+  end
+
   def built?(hex)
     return false if state.dig("hexes", hex, "built").try(:empty?)
     state.dig("hexes", hex, "built")

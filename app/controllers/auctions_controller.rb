@@ -10,6 +10,7 @@ class AuctionsController < ApplicationController
     respond_to do |format|
       if auction.valid_start?
         @game.start_auction!(auction)
+        @game.broadcast_updates
         format.html { redirect_to game_url(@game), notice: 'Auction started' }
       else
         format.html { render 'new_auction', status: :unprocessable_entity } 
@@ -25,9 +26,9 @@ class AuctionsController < ApplicationController
     respond_to do |format|
       if auction_action.valid?
         @game.bid_auction!(current_user, auction_action)
+        @game.broadcast_updates
         format.html { redirect_to game_url(@game), notice: 'Bade' }
       else
-        pp @game.errors
         format.html { render 'new_bid', status: :unprocessable_entity }
       end
     end
@@ -38,6 +39,7 @@ class AuctionsController < ApplicationController
     respond_to do |format|
       if auction_action.valid_pass?
         @game.pass_auction!(current_user, auction_action)
+        @game.broadcast_updates
         format.html { redirect_to game_url(@game), notice: 'Passed' }
       else
         format.html { redirect_to 'new_bid', status: :unprocessable_entity }

@@ -1,6 +1,6 @@
 <h3>Players</h3>
 <div class="player-container">
-  <% @game.players_enumerator do |player| %>
+  <% game.players_enumerator do |player| %>
     <%= render 'games/player', player: player %>
   <% end %>
 </div>
