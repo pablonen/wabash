@@ -3,4 +3,11 @@
   </header>
   <section><%= data[:actions_left] %>/<%= data[:max] %>
   </section>
+  <footer>
+    <% if !data[:actions_left].zero? %>
+      <%= link_to action.capitalize, data[:link] %>
+    <% else %>
+      <%= content_tag(:s, action.capitalize , class: "strikethrough") %>
+    <% end %>
+  </footer>
 </article>

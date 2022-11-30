@@ -1,14 +1,10 @@
 <div id="<%= dom_id(game) %>" class="game">
   <div class="state-container">
-  <p>
-    <strong>Name:</strong>
-    <%= game.name %>
-  </p>
 
   <%= render 'games/auction', game: game if game.phase?(:bidding) and game.state['auction'] %>
-  <%= render 'games/companies', game: game if game.started? %>
   <%= render 'games/actions', game: game if game.started? %>
   <%= render 'games/players', game: game if game.started? %>
+  <%= render 'games/companies', game: game if game.started? %>
 
   <p>
       <strong>Started:</strong>

@@ -7,10 +7,10 @@
   border-radius: 1em;
   overflow: hidden;
   line-height: 1.5em;
+  background-color: antiquewhite;
 }
 
 .action section {
-  background-color: antiquewhite;
   margin: 0em;
   padding: 1em;
   display: flex;
@@ -22,6 +22,10 @@
   justify-content: center;
   display: flex;
   padding: 0em 2em 0em;
+}
+
+.action footer {
+  text-align: center;
 }
 
 .action header.available {
