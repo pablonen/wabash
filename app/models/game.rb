@@ -343,7 +343,6 @@ class Game < ApplicationRecord
     if state['hexes'][DETROIT]['income'].to_i == 8
       end_game!
     end
-    next_turn!
   end
 
   def chicago_dividend!(company)
@@ -409,7 +408,7 @@ class Game < ApplicationRecord
 
   def action_availability
     path_helper = Rails.application.routes.url_helpers
-    { auction: { max: 3, used: state['auctions'], actions_left: 3 - state['auctions'], available: auction_available? ? "available" : "unavailable", link: path_helper.new_build_path(self) },
+    { auction: { max: 3, used: state['auctions'], actions_left: 3 - state['auctions'], available: auction_available? ? "available" : "unavailable", link: path_helper.new_auction_path(self) },
       develop: { max: 4, used: state['developments'], actions_left: 4 - state['developments'], available: development_available? ? "available" : "unavailable", link: path_helper.new_development_path(self) },
       build: { max: 5, used: state['builds'], actions_left: 5 - state['builds'], available: build_available? ? "available" : "unavailable", link: path_helper.new_build_path(self) }}
   end
