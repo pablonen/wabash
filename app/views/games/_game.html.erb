@@ -1,46 +1,13 @@
 <div id="<%= dom_id(game) %>" class="game">
   <div class="state-container">
 
-  <%= render 'games/auction', game: game if game.phase?(:bidding) and game.state['auction'] %>
-  <%= render 'games/actions', game: game if game.started? %>
-  <%= render 'games/players', game: game if game.started? %>
-  <%= render 'games/companies', game: game if game.started? %>
+    <%= render 'games/auction', game: game if game.phase?(:bidding) and game.state['auction'] %>
+    <%= render 'games/actions', game: game if game.started? %>
+    <%= render 'games/players', game: game if game.started? %>
+    <%= render 'games/companies', game: game if game.started? %>
 
-  <p>
-      <strong>Started:</strong>
-      <% if start_time = game.started %>
-        <time datetime="<%= start_time %>"><%= start_time %></time>
-      <% else %>
-        not started
-      <% end %>
-  </p>
-  <p>
-    <strong>Joined:</strong>
-    <ol>
-      <% game.game_players.each do |game_player| %>
-        <li><%= game_player.user_id %> seat:<%= game_player.seat %></li>
-      <% end %>
-    </ol>
-  </p>
-
-  <% if game.started? %>
-    <p>
-      <strong>Acting:</strong>
-      <%= game.acting_player.id %>
-    </p>
-  <% end %>
-  <p>
-    <strong>Phase:</strong>
-    <%= game.phase %>
-  </p>
-
-  <p>
-    <strong>State:</strong>
-    <pre>
-      <%= JSON.pretty_generate(game.state.except('hexes')) %>
-    </pre>
-  </p>
   </div>
+
   <div class="board-container">
     <p>
       <strong>Board:</strong>
