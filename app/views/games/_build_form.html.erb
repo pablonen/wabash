@@ -1,3 +1,4 @@
+<%= turbo_frame_tag "board-frame" do %>
 <%= link_to 'Back to game', game_path(game) %>
 <%= form_with url: game_builds_path do |form| %>
   <% if game.errors.any? %>
@@ -40,4 +41,5 @@
   </div>
     <%= form.submit 'Pass build' %>
   </div>
+<% end %>
 <% end %>

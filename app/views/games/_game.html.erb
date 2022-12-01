@@ -1,18 +1,18 @@
 <div id="<%= dom_id(game) %>" class="game">
   <div class="state-container">
 
-    <%= render 'games/auction', game: game if game.phase?(:bidding) and game.state['auction'] %>
-    <%= render 'games/actions', game: game if game.started? %>
+    <%= turbo_frame_tag "auction-frame", target: "board-frame" do %>
+      <%= render 'games/auction', game: game if game.phase?(:bidding) and game.state['auction'] %>
+      <%= render 'games/actions', game: game if game.started? %>
+    <% end %>
     <%= render 'games/players', game: game if game.started? %>
     <%= render 'games/companies', game: game if game.started? %>
 
   </div>
 
   <div class="board-container">
-    <p>
-      <strong>Board:</strong>
+    <%= turbo_frame_tag "board-frame" do %>
       <%= render 'games/board', game: game %>
-    </p>
-
+    <% end %>
   </div>
 </div>
