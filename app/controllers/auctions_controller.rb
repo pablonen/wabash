@@ -42,7 +42,7 @@ class AuctionsController < ApplicationController
         @game.broadcast_updates
         format.html { redirect_to game_url(@game), notice: 'Passed' }
       else
-        format.html { redirect_to 'new_bid', status: :unprocessable_entity }
+        format.html { render 'new_bid', status: :unprocessable_entity }
       end
     end
   end
