@@ -57,3 +57,7 @@
 .auction section:last-child {
   padding-bottom: 1em;
 }
+
+.auction footer {
+  text-align: center;
+}
