@@ -14,4 +14,8 @@
         <% end %> 
       <% end %>
     <% end %>
+    <%= content_tag :footer do %>
+      <%= link_to "Bid", new_bid_path(game) %>
+    <% end %>
+  </article>
 </div>
