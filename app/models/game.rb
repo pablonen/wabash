@@ -416,10 +416,11 @@ class Game < ApplicationRecord
   end
 
   def available_companies_for_building(user)
-    # TODO, shouldnt return nils ?
-    user.shares(self).uniq.reduce([]) do |available, company|
+    available_companies = user.shares(self).uniq.reduce([]) do |available, company|
       if state["companies"][company]['track'].nonzero? && state["companies"][company]['money'].positive?
         available << company
+      else
+        available
       end
     end
   end
