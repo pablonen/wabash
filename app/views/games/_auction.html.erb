@@ -3,7 +3,6 @@
     <%= tag.header game.state['auction'].capitalize, class: [game.state['auction']] %>
     <%= tag.section game.state['high_bid'], class: "high-bid" %>
     <%= tag.section "From "+game.high_bidder_name, class: "high-bidder" %>
-
     <% if game.players.size > 2 %>
       <%= content_tag :section, class: "passers" do |content| %>
         <h4>Passers</h4>
@@ -11,11 +10,11 @@
           <% game.state['passers'].each do |passer| %>
             <%= tag.li passer %>
           <% end %>
-        <% end %> 
+        <% end %>
       <% end %>
     <% end %>
     <%= content_tag :footer do %>
-      <%= link_to "Bid", new_bid_path(game) %>
+      <%= link_to "Bid", new_bid_path(game) if game.user_acting? user %>
     <% end %>
   </article>
 </div>

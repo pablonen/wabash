@@ -4,10 +4,14 @@
   <section><%= data[:actions_left] %>/<%= data[:max] %>
   </section>
   <footer>
-    <% if !data[:actions_left].zero? %>
+    <% if !game.user_acting? user %>
+      <%= content_tag(:span, "") %>
+    <% elsif game.phase? :bidding %>
+      <%= content_tag(:span, "") %>
+    <% elsif data[:actions_left].nonzero? %>
       <%= link_to action.capitalize, data[:link] %>
     <% else %>
-      <%= content_tag(:s, action.capitalize , class: "strikethrough") %>
+      <%= content_tag :s, action.capitalize %>
     <% end %>
   </footer>
 </article>

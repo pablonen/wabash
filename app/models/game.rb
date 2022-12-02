@@ -18,7 +18,9 @@ class Game < ApplicationRecord
   FORT_WAYNE = 'D3'
 
   def broadcast_updates
-    broadcast_replace_to self, partial: "games/game"
+    self.players.each do |player|
+      broadcast_replace_to [User,player,self], partial: "games/game", locals: { user: player }
+    end
   end
 
   def built?(hex)

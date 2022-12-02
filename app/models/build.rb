@@ -57,7 +57,7 @@ class Build
 
   def sufficient_money?
     @game.errors.add(:base, "Company does not have enough money") if @cost > @game.state['companies'][@company]["money"]
-    @cost < @game.state['companies'][@company]["money"]
+    @cost <= @game.state['companies'][@company]["money"]
   end
 
   def player_owns_shares?

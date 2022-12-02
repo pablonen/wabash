@@ -2,8 +2,8 @@
   <div class="state-container">
 
     <%= turbo_frame_tag "auction-frame", target: "board-frame" do %>
-      <%= render 'games/auction', game: game if game.phase?(:bidding) and game.state['auction'] %>
-      <%= render 'games/actions', game: game if game.started? %>
+      <%= render 'games/auction', game: game, user: user if game.phase?(:bidding) and game.state['auction'] %>
+      <%= render 'games/actions', game: game, user: user if game.started? %>
     <% end %>
     <%= render 'games/players', game: game if game.started? %>
     <%= render 'games/companies', game: game if game.started? %>
