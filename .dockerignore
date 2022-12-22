@@ -3,6 +3,9 @@
 config/master.key
 config/credentials/*.key
 
+db.env
+.env
+
 /log/*
 /tmp/*
 <% if keeps? -%>
