@@ -1,0 +1,30 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+      - db
+    logging:
+      options:
+        max-size: "10m"
+    env_file:
+      - .env
+    environment:
+      - "DATABASE_URL=postgres://db"
+      - "REDIS_URL=redis://redis"
+
+  redis:
+    image: redis
+    logging:
+      options:
+        max-size: "10m"
+
+  db:
+    image: postgres:12.13
+    env_file:
+      - db.env
+    environment:
+      - "POSTGRES_USER=turbo_chicago"
+      - "POSTGRES_DB=turbo_chicago_production"
