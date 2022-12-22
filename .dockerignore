@@ -1,0 +1,23 @@
+/.bundle
+
+config/master.key
+config/credentials/*.key
+
+/log/*
+/tmp/*
+<% if keeps? -%>
+!/log/.keep
+!/tmp/.keep
+
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+
+/storage/*
+
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/
+!/tmp/storage/.keep
+
+/public/assets
