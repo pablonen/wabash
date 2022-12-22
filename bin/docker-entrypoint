@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ $# -eq 0]; then
+  ./bin/rails db:prepare
+
+  exec bin/rails server
+else
+  exec bin/rails "$@"
+fi
