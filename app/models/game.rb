@@ -44,12 +44,12 @@ class Game < ApplicationRecord
     # build the hexes
     build.hexes.each do |hex|
       state['hexes'][hex]['built'] << build.company
+      state['hexes'][hex]['cost'] += build.cost
       state['companies'][build.company]['built_track'] << hex
       state['companies'][build.company]['income'] += state['hexes'][hex]['income'].to_i
     end
     # remove tracks from company
     state['companies'][build.company]['track'] -= build.hexes.size
-    # TODO, increase the hex cost here? or in build_cost_for?
 
     # If chicago was built for the first time, trigger the chicago dividend
     # and start the black company

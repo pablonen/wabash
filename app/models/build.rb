@@ -22,7 +22,8 @@ class Build
     enough_tracks_to_build? &&
     sufficient_money? &&
     player_owns_shares? &&
-    connected_to_company_track?
+    connected_to_company_track? &&
+    sole_track_in_mountains_and_forests?
   end
 
   def not_ended?
@@ -80,6 +81,15 @@ class Build
 
     @game.errors.add(:base, "Proposed track is not connected to the company track") unless connected
     connected
+  end
+
+  def sole_track_in_mountains_and_forests?
+    hex_data = @game.state['hexes'].slice(*@hexes)
+    already_built_hexes = hex_data.select { |hex| hex['type'] == "mountain" || hex['type'] == "forest" }.select do |hex|
+      !hex['built'].empty?
+    end
+    @game.errors.add(:base, "Cannot build another track in mountain/forest hex #{already_built_hexes.join(',')}" ) unless already_built_hexes.empty?
+    already_built_hexes.empty?
   end
 
   # Implementation boilerplate see https://api.rubyonrails.org/v7.0.4/classes/ActiveModel/Errors.html 
