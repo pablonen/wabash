@@ -20,7 +20,6 @@
        data-hex-selected-class="selected"
        data-action="hex:hex_selected->builds#process
                     builds:unselect->hex#unselect_hex">
-    <%= render 'games/board', game: game %>
     <div>
       <%= form.text_field "hex[]", {data: { 'builds-target'=> 'input'}} %>
       <%= form.text_field "hex[]", {data: { 'builds-target'=> 'input'}} %>
@@ -30,6 +29,7 @@
     <div>
       <%= form.submit 'Build' %>
     </div>
+    <%= render 'games/board', game: game %>
   </div>
 <% end %>
 

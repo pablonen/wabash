@@ -78,11 +78,11 @@ class Auction
   end
 
   def shares_left?
-    shares_left = @game.state['companies'][@company]['shares'].nonzero?
-    unless shares_left
+    shares_left = @game.state['companies'][@company]['shares'] - @game.state['companies'][@company]['shares_sold']
+    unless shares_left.positive?
       @game.errors.add(:base, "Company #{@company} has no shares to auction")
     end
-    shares_left
+    shares_left.positive?
   end
   # Implementation boilerplate see https://api.rubyonrails.org/v7.0.4/classes/ActiveModel/Errors.html 
   def read_attribute_for_validation(attr)

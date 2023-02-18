@@ -7,6 +7,7 @@ class BuildsControllerTest < ActionDispatch::IntegrationTest
     @user = users(:one)
     sign_in @user
     @game.start!
+    @game.skip_initial_auction!
     @game.state['players']["0"]['shares'] = ['red']
     @game.state['companies']['red']['money'] = 20
     @game.save
@@ -55,6 +56,19 @@ class BuildsControllerTest < ActionDispatch::IntegrationTest
 
   test "connects to company track" do
     post game_builds_url(@game), params: { hex: ['R3'] , company: 'red' }
+    assert_response :unprocessable_entity
+  end
+
+  test "mountain and forest hexes" do
+    @game.state["companies"]["red"]["built_hexes"] = ["R5", "Q5", "P4", "O4"]
+    @game.state['hexes']["R5"]["built"] = ['red']
+    @game.state['hexes']["Q5"]["built"] = ['red']
+    @game.state['hexes']["P4"]["built"] = ['red']
+    @game.state['hexes']["O4"]["built"] = ['red']
+
+    @game.save
+    @game.reload
+    post game_builds_url(@game), params: { hex: ['N4'], company: 'red' }
     assert_response :unprocessable_entity
   end
 end

@@ -8,7 +8,7 @@
 
   <div>
     <%= form.label :bid, style: "display: block" %>
-    <%= form.number_field :bid, in: 1..100 %>
+    <%= form.number_field :bid, in: 1..100, value: game.state['high_bid'] + 1 %>
   </div>
 
   <div>
