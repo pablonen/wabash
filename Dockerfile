@@ -1,4 +1,4 @@
-FROM ruby:3.1.3
+FROM ruby:3.2.1
 WORKDIR /rails
 ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_SERVE_STATIC_FILES="true" \
