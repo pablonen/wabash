@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'registrations' }
   resources :games
 
   get 'games/:game_id/new_build', to: 'builds#new_build', as: 'new_build'
